@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models\Auth;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+
+class ActivityLog extends Model
+{
+    protected $table = 'activity_log';
+
+    protected $fillable = [
+        'log_name',
+        'description',
+        'subject_type',
+        'subject_id',
+        'event',
+        'causer_type',
+        'causer_id',
+        'properties',
+        'batch_uuid',
+    ];
+
+    protected $casts = [
+        'properties' => 'array',
+    ];
+
+    public function subject(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    public function causer(): MorphTo
+    {
+        return $this->morphTo();
+    }
+}

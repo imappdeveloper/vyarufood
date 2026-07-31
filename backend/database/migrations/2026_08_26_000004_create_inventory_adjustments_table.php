@@ -1,0 +1,36 @@
+<?php
+
+declare(strict_types=1);
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('inventory_adjustments', function (Blueprint $table) {
+            $table->id();
+            $table->uuid('uuid')->unique();
+            $table->string('adjustment_number', 50)->unique();
+            $table->foreignId('inventory_item_id')->constrained('inventory_items')->cascadeOnDelete();
+            $table->enum('adjustment_type', ['addition', 'subtraction']);
+            $table->decimal('adjustment_quantity', 12, 2);
+            $table->text('reason');
+            $table->unsignedBigInteger('approved_by')->nullable();
+            $table->timestamp('approved_at')->nullable();
+            $table->text('remarks')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->timestamps();
+
+            $table->index(['inventory_item_id', 'adjustment_type']);
+            $table->index('adjustment_number');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('inventory_adjustments');
+    }
+};

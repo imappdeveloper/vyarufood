@@ -1,0 +1,6 @@
+{
+  "APP": { "NAME": "Tiffin Management System" },
+  "AUTH": { "LOGIN": "Login", "LOGOUT": "Logout", "EMAIL": "Email", "PASSWORD": "Password", "REMEMBER_ME": "Remember Me", "FORGOT_PASSWORD": "Forgot Password?" },
+  "COMMON": { "SAVE": "Save", "CANCEL": "Cancel", "DELETE": "Delete", "EDIT": "Edit", "VIEW": "View", "CREATE": "Create", "SEARCH": "Search", "FILTER": "Filter", "RESET": "Reset", "EXPORT": "Export", "IMPORT": "Import", "ACTIONS": "Actions", "CONFIRM": "Confirm", "YES": "Yes", "NO": "No", "LOADING": "Loading...", "NO_DATA": "No data available", "SUCCESS": "Success", "ERROR": "Error" },
+  "MENU": { "DASHBOARD": "Dashboard", "USERS": "Users", "SETTINGS": "Settings", "PROFILE": "Profile" }
+}

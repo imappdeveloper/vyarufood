@@ -1,0 +1,23 @@
+# Secrets / test artifacts - do NOT commit
+/cookies.txt
+/login.json
+/error.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Env
+.env
+.env.local
+.env.backup
+.env.production

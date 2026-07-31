@@ -1,0 +1,12 @@
+export const environment = {
+  production: false,
+  apiUrl: '/api',
+  apiVersion: 'v1',
+  appName: 'Tiffin Management System - Dev',
+  tokenKey: 'auth_token',
+  userKey: 'auth_user',
+  defaultLanguage: 'en',
+  defaultPerPage: 15,
+  maxFileSize: 10240,
+  allowedImageTypes: ['image/jpeg', 'image/png', 'image/webp'],
+};

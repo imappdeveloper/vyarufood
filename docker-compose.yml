@@ -1,0 +1,101 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: tiffin-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./backend:/var/www
+      - ./backend/storage:/var/www/storage
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - tiffin-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: tiffin-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./backend:/var/www
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - app
+    networks:
+      - tiffin-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: tiffin-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: tiffin_db
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_USER: tiffin_user
+      MYSQL_PASSWORD: secret
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - tiffin-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: tiffin-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - tiffin-network
+
+  queue:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: tiffin-queue
+    restart: unless-stopped
+    working_dir: /var/www
+    command: php artisan queue:work --sleep=3 --tries=3 --max-time=3600
+    volumes:
+      - ./backend:/var/www
+    depends_on:
+      - app
+      - redis
+    networks:
+      - tiffin-network
+
+  scheduler:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: tiffin-scheduler
+    restart: unless-stopped
+    working_dir: /var/www
+    command: >
+      sh -c "while true; do php artisan schedule:run --verbose --no-interaction & sleep 60; done"
+    volumes:
+      - ./backend:/var/www
+    depends_on:
+      - app
+      - redis
+    networks:
+      - tiffin-network
+
+volumes:
+  mysql-data:
+  redis-data:
+
+networks:
+  tiffin-network:
+    driver: bridge
