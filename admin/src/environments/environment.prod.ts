@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.tiffin.example.com/api',
+  apiUrl: '/api',
   apiVersion: 'v1',
   appName: 'Tiffin Management System',
   tokenKey: 'auth_token',

@@ -1,0 +1,7 @@
+[build]
+builder = "DOCKERFILE"
+# Path is relative to the repo root (service Root Directory is left empty)
+dockerfilePath = "database/Dockerfile"
+
+[deploy]
+numReplicas = 1
