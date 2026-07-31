@@ -10,7 +10,7 @@ RUN npm run build:prod
 FROM composer:latest AS composer
 WORKDIR /var/www
 COPY backend/composer.json backend/composer.lock ./
-RUN composer install --no-dev --no-scripts --no-interaction --prefer-dist \
+RUN composer install --no-dev --no-scripts --no-interaction --prefer-dist --ignore-platform-reqs \
     && rm -rf /root/.composer/cache
 
 # Stage 3: runtime - Laravel API + Angular SPA + nginx + queue worker
