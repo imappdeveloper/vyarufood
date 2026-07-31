@@ -5,7 +5,7 @@ cd /var/www
 
 echo "==> [entrypoint] boot: creating .env if missing"
 if [ ! -f .env ]; then
-    printf 'APP_KEY=\n' > .env
+    printf 'APP_KEY=\nAPP_ENV=production\nAPP_DEBUG=true\nDB_CONNECTION=sqlite\n' > .env
 fi
 
 echo "==> [entrypoint] boot: generating app key"
