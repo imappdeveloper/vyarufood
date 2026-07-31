@@ -5,4 +5,3 @@ dockerfilePath = "Dockerfile"
 [deploy]
 healthcheckPath = "/up"
 healthcheckTimeout = 300
-numReplicas = 1
