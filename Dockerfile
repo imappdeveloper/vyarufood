@@ -2,7 +2,7 @@
 FROM node:22-alpine AS frontend
 WORKDIR /app
 COPY admin/package.json admin/package-lock.json ./
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 COPY admin/ ./
 RUN npm run build:prod
 
