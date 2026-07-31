@@ -43,4 +43,21 @@ echo "==> [entrypoint] starting queue worker"
 php artisan queue:work --sleep=3 --tries=3 --max-time=3600 2>&1 &
 
 echo "==> [entrypoint] starting nginx"
-exec nginx -g 'daemon off;'
+nginx -g 'daemon off;' &
+
+echo "==> [entrypoint] waiting for web server, then probing /up"
+for i in $(seq 1 15); do
+    sleep 2
+    code=$(curl -s -o /tmp/up.out -w "%{http_code}" http://127.0.0.1:${PORT}/up 2>/dev/null || echo "000")
+    echo "==> [entrypoint] /up probe #${i}: HTTP ${code}"
+    if [ "$code" = "200" ] || [ "$code" = "500" ]; then
+        echo "==> [entrypoint] /up body:"
+        cat /tmp/up.out
+        echo ""
+        echo "==> [entrypoint] last laravel log lines:"
+        tail -n 60 /var/www/storage/logs/laravel.log 2>/dev/null || echo "(no laravel.log)"
+        break
+    fi
+done
+
+wait
