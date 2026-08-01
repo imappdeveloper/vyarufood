@@ -5,6 +5,8 @@ export APP_DEBUG=true
 
 cd /var/www
 
+mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs
+
 echo "==> [entrypoint] boot: creating .env if missing"
 if [ ! -f .env ]; then
     printf 'APP_KEY=\nAPP_ENV=production\nAPP_DEBUG=true\n' > .env
@@ -32,15 +34,19 @@ fi
 echo "==> [entrypoint] boot: generating app key"
 php artisan key:generate --force --no-interaction || echo "!! key:generate failed (continuing)"
 
-echo "==> [entrypoint] boot: running migrations (retry x30)"
-for i in $(seq 1 30); do
-    if php artisan migrate --force --no-interaction; then
-        echo "==> [entrypoint] migrations ok"
-        break
-    fi
-    echo "!! waiting for database... ($i/30)"
-    sleep 3
-done
+if [ "${DB_CONNECTION:-}" = "mysql" ]; then
+    echo "==> [entrypoint] boot: running migrations (retry x30)"
+    for i in $(seq 1 30); do
+        if php artisan migrate --force --no-interaction; then
+            echo "==> [entrypoint] migrations ok"
+            break
+        fi
+        echo "!! waiting for database... ($i/30)"
+        sleep 3
+    done
+else
+    echo "!! DB_CONNECTION != mysql (${DB_CONNECTION:-unset}) - skipping migrations"
+fi
 
 echo "==> [entrypoint] boot: storage link"
 php artisan storage:link --force --no-interaction || echo "!! storage:link failed (continuing)"

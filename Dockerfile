@@ -36,7 +36,8 @@ COPY --from=composer /var/www/vendor ./vendor
 
 RUN (php artisan package:discover --ansi || true)
 
-RUN chown -R www-data:www-data /var/www \
+RUN mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs \
+    && chown -R www-data:www-data /var/www \
     && chmod -R 775 /var/www/storage \
     && chmod -R 775 /var/www/bootstrap/cache
 
