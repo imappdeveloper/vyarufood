@@ -5,7 +5,15 @@ cd /var/www
 
 echo "==> [entrypoint] boot: creating .env if missing"
 if [ ! -f .env ]; then
-    printf 'APP_KEY=\nAPP_ENV=production\nAPP_DEBUG=true\nDB_CONNECTION=sqlite\n' > .env
+    printf 'APP_KEY=\nAPP_ENV=production\nAPP_DEBUG=true\n' > .env
+    if [ -n "${MYSQLHOST:-}" ]; then
+        printf 'DB_CONNECTION=mysql\nDB_HOST=%s\nDB_PORT=%s\nDB_DATABASE=%s\nDB_USERNAME=%s\nDB_PASSWORD=%s\n' \
+            "$MYSQLHOST" "$MYSQLPORT" "$MYSQLDATABASE" "$MYSQLUSER" "$MYSQLPASSWORD" >> .env
+        echo "==> [entrypoint] mapped MYSQL* vars to Laravel DB_* (mysql)"
+    else
+        printf 'DB_CONNECTION=sqlite\n' >> .env
+        echo "!! no MYSQL* vars found, falling back to sqlite"
+    fi
 fi
 
 echo "==> [entrypoint] boot: generating app key"
