@@ -1,6 +1,8 @@
 #!/bin/sh
 set -u
 
+export APP_DEBUG=true
+
 cd /var/www
 
 echo "==> [entrypoint] boot: creating .env if missing"
@@ -80,10 +82,14 @@ for i in $(seq 1 15); do
             php -r '
                 require "vendor/autoload.php";
                 $app = require "bootstrap/app.php";
+                $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+                echo "cached app.debug: ".var_export(config("app.debug"), true).PHP_EOL;
+                config(["app.debug" => true]);
                 try {
                     $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
                     $response = $kernel->handle(Illuminate\Http\Request::create("http://localhost/up", "GET"));
                     echo "diag status: ".$response->getStatusCode().PHP_EOL;
+                    echo "diag body:".PHP_EOL.substr($response->getContent(), 0, 4000).PHP_EOL;
                 } catch (\Throwable $e) {
                     echo "DIAG EXCEPTION ".get_class($e).": ".$e->getMessage().PHP_EOL;
                     echo $e->getTraceAsString().PHP_EOL;
