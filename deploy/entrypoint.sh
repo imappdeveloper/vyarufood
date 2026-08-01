@@ -64,6 +64,21 @@ for i in $(seq 1 15); do
         echo ""
         echo "==> [entrypoint] last laravel log lines:"
         tail -n 60 /var/www/storage/logs/laravel.log 2>/dev/null || echo "(no laravel.log)"
+        if [ "$code" != "200" ]; then
+            echo "==> [entrypoint] HTTP boot diagnostic:"
+            php -r '
+                require "vendor/autoload.php";
+                $app = require "bootstrap/app.php";
+                try {
+                    $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+                    $response = $kernel->handle(Illuminate\Http\Request::create("http://localhost/up", "GET"));
+                    echo "diag status: ".$response->getStatusCode().PHP_EOL;
+                } catch (\Throwable $e) {
+                    echo "DIAG EXCEPTION ".get_class($e).": ".$e->getMessage().PHP_EOL;
+                    echo $e->getTraceAsString().PHP_EOL;
+                }
+            ' 2>&1 || echo "!! php diag failed"
+        fi
         break
     fi
 done
