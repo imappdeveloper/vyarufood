@@ -44,6 +44,7 @@ COPY --from=frontend /app/dist/browser /var/www/html
 
 COPY deploy/nginx.conf /etc/nginx/http.d/default.conf.template
 COPY deploy/entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY deploy/import-db.php /var/www/deploy/import-db.php
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini

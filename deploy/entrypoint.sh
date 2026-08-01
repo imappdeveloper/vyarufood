@@ -7,13 +7,24 @@ echo "==> [entrypoint] boot: creating .env if missing"
 if [ ! -f .env ]; then
     printf 'APP_KEY=\nAPP_ENV=production\nAPP_DEBUG=true\n' > .env
     if [ -n "${MYSQLHOST:-}" ]; then
+        export DB_CONNECTION=mysql
+        export DB_HOST="$MYSQLHOST"
+        export DB_PORT="${MYSQLPORT:-3306}"
+        export DB_DATABASE="$MYSQLDATABASE"
+        export DB_USERNAME="$MYSQLUSER"
+        export DB_PASSWORD="$MYSQLPASSWORD"
         printf 'DB_CONNECTION=mysql\nDB_HOST=%s\nDB_PORT=%s\nDB_DATABASE=%s\nDB_USERNAME=%s\nDB_PASSWORD=%s\n' \
-            "$MYSQLHOST" "$MYSQLPORT" "$MYSQLDATABASE" "$MYSQLUSER" "$MYSQLPASSWORD" >> .env
+            "$DB_HOST" "$DB_PORT" "$DB_DATABASE" "$DB_USERNAME" "$DB_PASSWORD" >> .env
         echo "==> [entrypoint] mapped MYSQL* vars to Laravel DB_* (mysql)"
     else
         printf 'DB_CONNECTION=sqlite\n' >> .env
         echo "!! no MYSQL* vars found, falling back to sqlite"
     fi
+fi
+
+if [ "${DB_CONNECTION:-}" = "mysql" ]; then
+    echo "==> [entrypoint] ensuring database schema (dump import)"
+    php /var/www/deploy/import-db.php || echo "!! import-db failed (continuing)"
 fi
 
 echo "==> [entrypoint] boot: generating app key"
