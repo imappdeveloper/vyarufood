@@ -8,10 +8,7 @@ import { SpecialsSectionComponent } from './sections/specials-section.component'
 import { PopularSectionComponent } from './sections/popular-section.component';
 import { HealthySectionComponent } from './sections/healthy-section.component';
 import { PlansSectionComponent } from './sections/plans-section.component';
-import { HowItWorksComponent } from './sections/how-it-works.component';
-import { WhyChooseUsComponent } from './sections/why-choose-us.component';
 import { CookingAnimationComponent } from './sections/cooking-animation.component';
-import { PincodeBannerComponent } from '../../shared/components/pincode-banner/pincode-banner.component';
 
 @Component({
   selector: 'app-customer-home',
@@ -26,10 +23,7 @@ import { PincodeBannerComponent } from '../../shared/components/pincode-banner/p
     PopularSectionComponent,
     HealthySectionComponent,
     PlansSectionComponent,
-    HowItWorksComponent,
-    WhyChooseUsComponent,
     CookingAnimationComponent,
-    PincodeBannerComponent,
   ],
   styles: [`
     .home-container { overflow-x: clip; }
@@ -97,9 +91,6 @@ import { PincodeBannerComponent } from '../../shared/components/pincode-banner/p
   template: `
     <div class="home-container bg-white">
       <app-hero-section />
-      <div style="max-width: 56rem; margin: 0 auto; padding: 0 1rem; margin-top: -1.5rem; position: relative; z-index: 20;">
-        <app-pincode-banner />
-      </div>
       <div class="anim-section anim-left" #animSection><app-search-section /></div>
       <div class="anim-section anim-scale" #animSection><app-category-section /></div>
       <app-cooking-animation />
@@ -107,8 +98,6 @@ import { PincodeBannerComponent } from '../../shared/components/pincode-banner/p
       <div class="anim-section anim-right" #animSection><app-popular-section /></div>
       <div class="anim-section" #animSection><app-healthy-section /></div>
       <div class="anim-section anim-scale" #animSection><app-plans-section /></div>
-      <div class="anim-section anim-left" #animSection><app-how-it-works /></div>
-      <div class="anim-section" #animSection><app-why-choose-us /></div>
     </div>
   `,
 })

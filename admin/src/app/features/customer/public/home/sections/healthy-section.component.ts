@@ -29,7 +29,7 @@ import { Meal } from '../../../../../core/models/meal/meal.model';
         </div>
 
         @if (loading()) {
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+          <div class="app-scroll-row">
             @for (i of [1,2,3,4]; track i) {
               <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden animate-pulse shadow-sm">
                 <div class="h-44 bg-slate-200"></div>
@@ -47,7 +47,7 @@ import { Meal } from '../../../../../core/models/meal/meal.model';
             <p class="text-slate-500 text-sm">Healthy meal options will appear here.</p>
           </div>
         } @else {
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+          <div class="app-scroll-row">
             @for (meal of meals(); track meal.id; let i = $index) {
               <a [routerLink]="['/meals', meal.slug]" class="group block bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-green-300 hover:shadow-xl hover:shadow-green-500/10 transition-all duration-300 hover:-translate-y-1 shadow-sm">
                 <div class="relative h-44 bg-gradient-to-br from-green-50 to-emerald-50 overflow-hidden">

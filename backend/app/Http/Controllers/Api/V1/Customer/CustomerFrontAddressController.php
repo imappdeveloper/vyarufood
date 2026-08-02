@@ -49,6 +49,10 @@ class CustomerFrontAddressController extends BaseController
         $data['status'] = StatusEnum::Active;
         $data['is_verified'] = false;
 
+        if ($error = $this->resolvePincodeFromString($data)) {
+            return $this->errorResponse($error, 422);
+        }
+
         if (empty($data['delivery_zone_id'])) {
             $data['delivery_zone_id'] = $this->resolveDeliveryZone(
                 $data['city_id'] ?? null,
@@ -111,6 +115,10 @@ class CustomerFrontAddressController extends BaseController
         }
 
         $data = $request->validated();
+
+        if ($error = $this->resolvePincodeFromString($data)) {
+            return $this->errorResponse($error, 422);
+        }
 
         if (!array_key_exists('delivery_zone_id', $data) || empty($data['delivery_zone_id'])) {
             $data['delivery_zone_id'] = $this->resolveDeliveryZone(
@@ -253,6 +261,28 @@ class CustomerFrontAddressController extends BaseController
             ->orderBy('pincode')
             ->get();
         return $this->successResponse($pincodes);
+    }
+
+    private function resolvePincodeFromString(array &$data): ?string
+    {
+        if (!empty($data['pincode_id']) || empty($data['pincode'])) {
+            return null;
+        }
+
+        $pincodeString = trim((string) $data['pincode']);
+        unset($data['pincode']);
+
+        $record = Pincode::where('pincode', $pincodeString)
+            ->where('status', StatusEnum::Active)
+            ->first();
+
+        if (!$record) {
+            return 'The provided pincode is invalid. Please enter a valid pincode.';
+        }
+
+        $data['pincode_id'] = $record->id;
+
+        return null;
     }
 
     private function resolveDeliveryZone(?int $cityId, ?int $areaId, ?int $pincodeId): ?int

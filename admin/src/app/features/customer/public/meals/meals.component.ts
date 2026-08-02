@@ -14,7 +14,6 @@ import { PaginationMeta } from '../../../../core/interfaces/api-response.interfa
 import { MealCardComponent } from '../../../../shared/components/meal-card/meal-card.component';
 import { CustomerPaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { MealFilterSidebarComponent, MealFilters } from './meal-filter-sidebar.component';
-import { PincodeBannerComponent } from '../../shared/components/pincode-banner/pincode-banner.component';
 
 @Component({
   selector: 'app-meals-page',
@@ -23,11 +22,10 @@ import { PincodeBannerComponent } from '../../shared/components/pincode-banner/p
     CommonModule, FormsModule, RouterModule,
     MealCardComponent,
     CustomerPaginationComponent, MealFilterSidebarComponent,
-    PincodeBannerComponent,
   ],
   template: `
     <!-- Hero Banner with Floating Ingredients -->
-    <section style="background: linear-gradient(135deg, #059669, #047857, #166534); padding: 3.5rem 1rem 3rem; position: relative; overflow: hidden;">
+    <section class="meals-hero" style="background: linear-gradient(135deg, #059669, #047857, #166534); padding: 3.5rem 1rem 3rem; position: relative; overflow: hidden;">
       <!-- Decorative blurs -->
       <div style="position: absolute; inset: 0; opacity: 0.06; pointer-events: none;">
         <div style="position: absolute; top: -3rem; right: -3rem; width: 12rem; height: 12rem; background: #fff; border-radius: 50%; filter: blur(50px);"></div>
@@ -46,9 +44,9 @@ import { PincodeBannerComponent } from '../../shared/components/pincode-banner/p
         <div style="width: 2px; height: 2rem; background: linear-gradient(to top, #fff, transparent); border-radius: 9999px; animation: mealSteam 2s ease-in-out infinite 0.8s;"></div>
       </div>
 
-      <div style="max-width: 80rem; margin: 0 auto; position: relative; z-index: 10;">
+      <div class="meals-hero-content" style="max-width: 80rem; margin: 0 auto; position: relative; z-index: 10;">
         <!-- Breadcrumb -->
-        <nav style="margin-bottom: 1rem; animation: mealsSlideIn 0.5s ease-out;" aria-label="Breadcrumb">
+        <nav class="meals-breadcrumb" style="margin-bottom: 1rem; animation: mealsSlideIn 0.5s ease-out;" aria-label="Breadcrumb">
           <ol style="display: flex; align-items: center; gap: 0.25rem; list-style: none; padding: 0; margin: 0;">
             <li><a routerLink="/" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.8rem; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.7)'">Home</a></li>
             <li><span class="material-icons" style="font-size: 14px; color: rgba(255,255,255,0.4);">chevron_right</span></li>
@@ -60,27 +58,22 @@ import { PincodeBannerComponent } from '../../shared/components/pincode-banner/p
           </ol>
         </nav>
         <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.375rem;">
-          <span class="material-icons" style="font-size: 2rem; color: rgba(255,255,255,0.9); animation: mealsSlideIn 0.5s ease-out 0.05s both;">restaurant_menu</span>
-          <h1 style="font-size: 1.75rem; font-weight: 800; color: #fff; animation: mealsSlideIn 0.5s ease-out 0.1s both;">
+          <span class="meals-hero-icon material-icons" style="font-size: 2rem; color: rgba(255,255,255,0.9); animation: mealsSlideIn 0.5s ease-out 0.05s both;">restaurant_menu</span>
+          <h1 class="meals-hero-title" style="font-size: 1.75rem; font-weight: 800; color: #fff; animation: mealsSlideIn 0.5s ease-out 0.1s both;">
             Explore Our Meals
           </h1>
         </div>
-        <p style="color: rgba(255,255,255,0.8); font-size: 0.875rem; animation: mealsSlideIn 0.5s ease-out 0.2s both;">
+        <p class="meals-hero-sub" style="color: rgba(255,255,255,0.8); font-size: 0.875rem; animation: mealsSlideIn 0.5s ease-out 0.2s both;">
           Freshly prepared homestyle meals made for your everyday needs
         </p>
       </div>
     </section>
 
-    <!-- Pincode Check -->
-    <div style="max-width: 56rem; margin: 0 auto; padding: 0 1rem; margin-top: -1.5rem; position: relative; z-index: 20;">
-      <app-pincode-banner />
-    </div>
-
     <!-- Main Content -->
     <div style="max-width: 80rem; margin: 0 auto; padding: 1.5rem 1rem 3rem;">
 
       <!-- Search Bar -->
-      <div style="margin-bottom: 1.25rem; animation: mealsSlideIn 0.5s ease-out 0.3s both;">
+      <div class="meals-search" style="margin-bottom: 1.25rem; animation: mealsSlideIn 0.5s ease-out 0.3s both;">
         <div style="position: relative; max-width: 36rem;">
           <span class="material-icons" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 20px;">search</span>
           <input
@@ -102,7 +95,7 @@ import { PincodeBannerComponent } from '../../shared/components/pincode-banner/p
 
       <!-- Category Pills -->
       @if (categories().length > 0) {
-        <div style="margin-bottom: 1.25rem; overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none; animation: mealsSlideIn 0.5s ease-out 0.35s both;" class="scrollbar-hide">
+        <div class="meals-pills scrollbar-hide" style="margin-bottom: 1.25rem; overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none; animation: mealsSlideIn 0.5s ease-out 0.35s both;">
           <div style="display: flex; gap: 0.5rem; min-width: max-content;">
             <button (click)="selectCategory(null)"
                     style="padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; cursor: pointer; border: none; transition: all 0.25s;"
@@ -132,7 +125,7 @@ import { PincodeBannerComponent } from '../../shared/components/pincode-banner/p
       }
 
       <!-- Toolbar -->
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; gap: 1rem; animation: mealsSlideIn 0.5s ease-out 0.4s both;">
+      <div class="meals-toolbar" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; gap: 1rem; animation: mealsSlideIn 0.5s ease-out 0.4s both;">
         <div style="display: flex; align-items: center; gap: 0.75rem;">
           <!-- Filter button (mobile only) -->
           <button (click)="filterSidebar?.openMobile()"
@@ -147,7 +140,7 @@ import { PincodeBannerComponent } from '../../shared/components/pincode-banner/p
             }
           </button>
           <!-- View Toggle -->
-          <div style="display: flex; border: 1px solid #e2e8f0; border-radius: 0.5rem; overflow: hidden; background: #fff;">
+          <div class="meals-view-toggle" style="display: flex; border: 1px solid #e2e8f0; border-radius: 0.5rem; overflow: hidden; background: #fff;">
             <button (click)="viewMode.set('grid')" style="padding: 0.375rem 0.5rem; border: none; cursor: pointer; transition: all 0.2s; display: flex; align-items: center;"
                     [style.background]="viewMode() === 'grid' ? '#ecfdf5' : 'transparent'"
                     [style.color]="viewMode() === 'grid' ? '#059669' : '#94a3b8'">
@@ -159,7 +152,7 @@ import { PincodeBannerComponent } from '../../shared/components/pincode-banner/p
               <span class="material-icons" style="font-size: 18px;">view_list</span>
             </button>
           </div>
-          <p style="color: #64748b; font-size: 0.8rem;">
+          <p class="meals-count" style="color: #64748b; font-size: 0.8rem;">
             @if (!loading()) {
               <span style="font-weight: 600; color: #0f172a;">{{ totalResults() }}</span> meal{{ totalResults() !== 1 ? 's' : '' }} found
             }
@@ -454,6 +447,41 @@ import { PincodeBannerComponent } from '../../shared/components/pincode-banner/p
     @media (min-width: 1024px) {
       .meals-mobile-only { display: none !important; }
       .meals-sort-label { display: inline !important; }
+    }
+    @media (max-width: 1023.98px) {
+      /* Compact app-style hero */
+      .meals-hero { padding: 2.25rem 1rem 2.25rem !important; }
+      .meals-hero > *:not(.meals-hero-content) { display: none !important; }
+      .meals-breadcrumb { display: none !important; }
+      .meals-hero-icon { font-size: 1.5rem !important; }
+      .meals-hero-title { font-size: 1.4rem !important; }
+      .meals-hero-sub { font-size: 0.8rem !important; }
+
+      /* Sticky filter bar (app-style) pinned under the fixed header */
+      .meals-toolbar {
+        position: sticky;
+        top: 67px;
+        z-index: 30;
+        margin-left: -1rem;
+        margin-right: -1rem;
+        margin-bottom: 1rem !important;
+        padding: 0.6rem 1rem;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid #eef2f7;
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+      }
+      .meals-view-toggle { display: none !important; }
+      .meals-count { font-size: 0.72rem !important; }
+      .meals-toolbar select {
+        max-width: 9.5rem;
+        padding: 0.5rem 0.6rem !important;
+        font-size: 0.75rem !important;
+      }
+
+      /* Tighter app list spacing */
+      .meals-grid { gap: 0.75rem !important; }
     }
     @media (min-width: 640px) {
       .meals-grid { grid-template-columns: repeat(2, 1fr) !important; }

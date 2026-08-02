@@ -20,23 +20,23 @@ import { SeoService } from '../../../../core/services/seo.service';
   template: `
     <div [style]="'max-width: 1200px; margin: 0 auto; padding: 1.5rem 1rem;'">
       <!-- Hero Banner -->
-      <div style="background: linear-gradient(135deg, #059669, #10b981, #34d399); border-radius: 1rem; padding: 1.75rem 2rem; margin-bottom: 1.5rem; position: relative; overflow: hidden;">
+      <div class="sub-hero" style="background: linear-gradient(135deg, #059669, #10b981, #34d399); border-radius: 1rem; padding: 1.75rem 2rem; margin-bottom: 1.5rem; position: relative; overflow: hidden;">
         <div style="position: absolute; top: -1.5rem; right: -1.5rem; width: 10rem; height: 10rem; border-radius: 50%; background: rgba(255,255,255,0.08);"></div>
         <div style="position: absolute; bottom: -2rem; left: 25%; width: 8rem; height: 8rem; border-radius: 50%; background: rgba(255,255,255,0.06);"></div>
         <div style="position: relative; z-index: 1;">
           <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.25rem;">
-            <span class="material-icons" style="color: white; font-size: 1.5rem;">card_membership</span>
+            <span class="sub-hero-icon material-icons" style="color: white; font-size: 1.5rem;">card_membership</span>
             <span style="color: rgba(255,255,255,0.75); font-size: 0.875rem; font-weight: 500;">Configure</span>
           </div>
-          <h1 style="color: white; font-size: 1.5rem; font-weight: 700; margin: 0.25rem 0 0.25rem;">
+          <h1 class="sub-hero-title" style="color: white; font-size: 1.5rem; font-weight: 700; margin: 0.25rem 0 0.25rem;">
             {{ plan() ? plan()!.plan_name : 'Configure Subscription' }}
           </h1>
-          <p style="color: rgba(255,255,255,0.85); font-size: 0.875rem;">Customise your subscription plan details</p>
+          <p class="sub-hero-sub" style="color: rgba(255,255,255,0.85); font-size: 0.875rem;">Customise your subscription plan details</p>
         </div>
       </div>
 
       <!-- Breadcrumb -->
-      <nav [style]="'display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: #6b7280; margin-bottom: 1.5rem; flex-wrap: wrap;'">
+      <nav class="sub-breadcrumb" [style]="'display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: #6b7280; margin-bottom: 1.5rem; flex-wrap: wrap;'">
         <a routerLink="/" style="color: #6b7280; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#059669'" onmouseout="this.style.color='#6b7280'">Home</a>
         <span class="material-icons" style="font-size: 1rem; color: #d1d5db;">chevron_right</span>
         <a routerLink="/subscriptions" style="color: #6b7280; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#059669'" onmouseout="this.style.color='#6b7280'">Plans</a>
@@ -146,7 +146,7 @@ import { SeoService } from '../../../../core/services/seo.service';
                     @if (selectedAddress()!.address_line_2) {
                       <p style="font-size: 0.875rem; color: #4b5563;">{{ selectedAddress()!.address_line_2 }}</p>
                     }
-                    <p style="font-size: 0.875rem; color: #6b7280;">{{ selectedAddress()!.city?.name || '' }}{{ selectedAddress()!.state?.name ? ', ' + selectedAddress()!.state.name : '' }}{{ selectedAddress()!.pincode ? ' - ' + selectedAddress()!.pincode : '' }}</p>
+                    <p style="font-size: 0.875rem; color: #6b7280;">{{ selectedAddress()!.city?.name || '' }}{{ selectedAddress()!.state?.name ? ', ' + selectedAddress()!.state.name : '' }}{{ selectedAddress()!.pincode?.pincode ? ' - ' + selectedAddress()!.pincode.pincode : '' }}</p>
                   </div>
                 }
 
@@ -188,7 +188,7 @@ import { SeoService } from '../../../../core/services/seo.service';
           </div>
         }
 
-        <div [style]="'display: grid; grid-template-columns: ' + (isDesktop() ? '2fr 1fr' : '1fr') + '; gap: 2rem; align-items: start;'">
+        <div class="sub-config-grid" [style]="'display: grid; grid-template-columns: ' + (isDesktop() ? '2fr 1fr' : '1fr') + '; gap: 2rem; align-items: start;'">
           <!-- Left: Configuration -->
           <div style="display: flex; flex-direction: column; gap: 1.5rem;">
             <!-- Plan Summary Card -->
@@ -273,7 +273,7 @@ import { SeoService } from '../../../../core/services/seo.service';
                     @if (addr.address_line_2) {
                       <p style="font-size: 0.875rem; color: #6b7280;">{{ addr.address_line_2 }}</p>
                     }
-                    <p style="font-size: 0.875rem; color: #6b7280;">{{ addr.city?.name || '' }}{{ addr.state?.name ? ', ' + addr.state.name : '' }}{{ addr.pincode ? ' - ' + addr.pincode : '' }}</p>
+                    <p style="font-size: 0.875rem; color: #6b7280;">{{ addr.city?.name || '' }}{{ addr.state?.name ? ', ' + addr.state.name : '' }}{{ addr.pincode?.pincode ? ' - ' + addr.pincode.pincode : '' }}</p>
                     @if (addr.landmark) {
                       <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 0.25rem;">Landmark: {{ addr.landmark }}</p>
                     }
@@ -297,6 +297,21 @@ import { SeoService } from '../../../../core/services/seo.service';
                     </button>
                   </div>
                   <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <div>
+                      <label style="display: block; font-size: 0.875rem; color: #6b7280; margin-bottom: 0.375rem;">Address Type</label>
+                      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        @for (type of addressTypes; track type.value) {
+                          <button type="button" (click)="newAddress.address_type = type.value"
+                            style="padding: 0.45rem 0.875rem; border-radius: 0.5rem; border: 1.5px solid #e5e7eb; font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: all 0.2s; background: white;"
+                            [style.border-color]="newAddress.address_type === type.value ? '#059669' : '#e5e7eb'"
+                            [style.background]="newAddress.address_type === type.value ? '#f0fdf4' : 'white'"
+                            [style.color]="newAddress.address_type === type.value ? '#059669' : '#4b5563'"
+                            [style.font-weight]="newAddress.address_type === type.value ? '600' : '500'">
+                            {{ type.label }}
+                          </button>
+                        }
+                      </div>
+                    </div>
                     <div>
                       <label style="display: block; font-size: 0.875rem; color: #6b7280; margin-bottom: 0.25rem;">Address Line 1 *</label>
                       <input type="text" [(ngModel)]="newAddress.address_line_1" placeholder="Flat/House No., Building Name, Street" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none; font-size: 0.875rem; box-sizing: border-box; transition: border-color 0.2s;" onfocus="this.style.borderColor='#10b981';this.style.boxShadow='0 0 0 3px rgba(16,185,129,0.15)'" onblur="this.style.borderColor='#d1d5db';this.style.boxShadow='none'" />
@@ -396,7 +411,7 @@ import { SeoService } from '../../../../core/services/seo.service';
 
           <!-- Right: Order Summary -->
           <div>
-            <div style="background: white; border-radius: 1rem; border: 1px solid #e5e7eb; padding: 1.5rem; position: sticky; top: 6rem;">
+            <div class="sub-summary-card" style="background: white; border-radius: 1rem; border: 1px solid #e5e7eb; padding: 1.5rem; position: sticky; top: 6rem;">
               <h3 style="font-weight: 600; color: #111827; margin-bottom: 1rem; font-size: 1.0625rem;">Order Summary</h3>
               <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.875rem;">
                 <div style="display: flex; justify-content: space-between;">
@@ -447,7 +462,7 @@ import { SeoService } from '../../../../core/services/seo.service';
                 }
               </div>
 
-              <button (click)="subscribe()" [disabled]="!canSubscribe() || submitting() || confirming()" style="width: 100%; margin-top: 1.5rem; padding: 0.75rem 1.5rem; background: #059669; color: white; font-weight: 600; border: none; border-radius: 0.75rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; font-size: 1rem;" [style.opacity]="(!canSubscribe() || submitting() || confirming()) ? '0.5' : '1'" [style.cursor]="(!canSubscribe() || submitting() || confirming()) ? 'not-allowed' : 'pointer'" onmouseover="if(this.style.cursor!=='not-allowed')this.style.background='#047857'" onmouseout="if(this.style.cursor!=='not-allowed')this.style.background='#059669'">
+              <button class="sub-pay-btn" (click)="subscribe()" [disabled]="!canSubscribe() || submitting() || confirming()" style="width: 100%; margin-top: 1.5rem; padding: 0.75rem 1.5rem; background: #059669; color: white; font-weight: 600; border: none; border-radius: 0.75rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; font-size: 1rem;" [style.opacity]="(!canSubscribe() || submitting() || confirming()) ? '0.5' : '1'" [style.cursor]="(!canSubscribe() || submitting() || confirming()) ? 'not-allowed' : 'pointer'" onmouseover="if(this.style.cursor!=='not-allowed')this.style.background='#047857'" onmouseout="if(this.style.cursor!=='not-allowed')this.style.background='#059669'">
                 @if (submitting()) {
                   <span style="display: inline-flex; align-items: center; gap: 0.5rem;">
                     <span style="width: 1rem; height: 1rem; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 9999px; animation: spin 1s linear infinite; display: inline-block;"></span>
@@ -462,9 +477,111 @@ import { SeoService } from '../../../../core/services/seo.service';
             </div>
           </div>
         </div>
+
+        <!-- Mobile bottom spacer so sticky bar never covers content -->
+        <div class="sub-bottom-spacer"></div>
+
+        <!-- Mobile sticky bottom bar: Pay Now + button (above bottom nav) -->
+        <div class="sub-bottom-bar">
+          <div class="sbb-left">
+            <span class="sbb-label">Pay Now</span>
+            <span class="sbb-total">&#8377;{{ payNow() }}</span>
+          </div>
+          <button class="sbb-btn" (click)="subscribe()" [disabled]="!canSubscribe() || submitting() || confirming()">
+            @if (submitting()) {
+              <span style="width: 1rem; height: 1rem; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 9999px; animation: spin 1s linear infinite; display: inline-block;"></span>
+              <span>Processing...</span>
+            } @else {
+              <span>Pay &#8377;{{ payNow() }}</span>
+            }
+          </button>
+        </div>
       }
     </div>
   `,
+  styles: [`
+    :host { display: block; }
+    .sub-bottom-bar,
+    .sub-bottom-spacer { display: none; }
+
+    @media (max-width: 1023.98px) {
+      /* Compact app-style hero */
+      .sub-hero { padding: 1.25rem 1.25rem !important; border-radius: 0 !important; margin-bottom: 0.75rem !important; }
+      .sub-hero-icon { font-size: 1.25rem !important; }
+      .sub-hero-title { font-size: 1.3rem !important; }
+      .sub-hero-sub { font-size: 0.8rem !important; }
+
+      /* No breadcrumb in apps */
+      .sub-breadcrumb { display: none !important; }
+
+      .sub-config-grid { gap: 1rem !important; }
+
+      /* Summary card flows normally (not sticky) on mobile */
+      .sub-summary-card { position: static !important; }
+
+      /* In-card pay button is redundant on mobile (sticky bar has it) */
+      .sub-pay-btn { display: none !important; }
+
+      .sub-bottom-spacer { display: block; height: 76px; }
+
+      .sub-bottom-bar {
+        display: flex;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: calc(60px + env(safe-area-inset-bottom));
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 16px;
+        background: rgba(255, 255, 255, 0.97);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-top: 1px solid #e2e8f0;
+        box-shadow: 0 -6px 24px rgba(15, 23, 42, 0.08);
+        z-index: 40;
+      }
+
+      .sbb-left {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.25;
+        flex-shrink: 0;
+      }
+      .sbb-label {
+        font-size: 0.68rem;
+        color: #64748b;
+        font-weight: 600;
+      }
+      .sbb-total {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: #059669;
+      }
+      .sbb-btn {
+        flex: 1;
+        max-width: 220px;
+        padding: 0.8rem 1.25rem;
+        background: linear-gradient(135deg, #059669, #10b981);
+        color: white;
+        font-weight: 700;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 999px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35);
+        transition: opacity 0.2s;
+      }
+      .sbb-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  `],
 })
 export class SubscriptionConfigureComponent implements OnInit {
   private browseApi = inject(CustomerBrowseApiService);
@@ -563,6 +680,7 @@ export class SubscriptionConfigureComponent implements OnInit {
   });
 
   newAddress: CreateCustomerAddress & { address_line_2?: string } = {
+    address_type: 'home',
     address_line_1: '',
     address_line_2: '',
     landmark: '',
@@ -574,6 +692,13 @@ export class SubscriptionConfigureComponent implements OnInit {
     state_id: 1,
     city_id: 1,
   };
+
+  addressTypes = [
+    { value: 'home', label: 'Home' },
+    { value: 'office', label: 'Office' },
+    { value: 'apartment', label: 'Apartment' },
+    { value: 'other', label: 'Other' },
+  ];
 
   ngOnInit(): void {
     const tomorrow = new Date();
@@ -713,11 +838,19 @@ export class SubscriptionConfigureComponent implements OnInit {
   }
 
   saveNewAddress(): void {
-    if (!this.newAddress.address_line_1) return;
+    const pincodeValue = (this.newAddress.pincode || '').trim();
+    if (!this.newAddress.address_line_1) {
+      this.addressFormError.set('Please enter your address.');
+      return;
+    }
+    if (!/^\d{6}$/.test(pincodeValue)) {
+      this.addressFormError.set('Please enter a valid 6-digit pincode.');
+      return;
+    }
     this.savingAddress.set(true);
     this.addressFormError.set(null);
 
-    this.addressApi.createAddress(this.newAddress).subscribe({
+    this.addressApi.createAddress({ ...this.newAddress, pincode: pincodeValue }).subscribe({
       next: (res) => {
         this.savingAddress.set(false);
         if (res.success && res.data) {
@@ -751,6 +884,7 @@ export class SubscriptionConfigureComponent implements OnInit {
 
   private resetNewAddressForm(): void {
     this.newAddress = {
+      address_type: 'home',
       address_line_1: '',
       address_line_2: '',
       landmark: '',

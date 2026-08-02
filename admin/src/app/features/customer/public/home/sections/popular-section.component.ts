@@ -32,7 +32,7 @@ import { SkeletonLoaderComponent } from '../../../../../shared/components/skelet
         </div>
 
         @if (loading()) {
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+          <div class="app-scroll-row">
             @for (i of [1,2,3,4]; track i) {
               <app-skeleton-loader type="card"></app-skeleton-loader>
             }
@@ -43,7 +43,7 @@ import { SkeletonLoaderComponent } from '../../../../../shared/components/skelet
             <p class="text-slate-500 text-sm">Popular meals will appear here soon.</p>
           </div>
         } @else {
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+          <div class="app-scroll-row">
             @for (meal of meals(); track meal.id; let i = $index) {
               <app-meal-card [meal]="meal" (onAddToCart)="addToCart($event)" (onBuyNow)="buyNow($event)"></app-meal-card>
             }

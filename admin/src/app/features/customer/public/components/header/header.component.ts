@@ -11,9 +11,10 @@ import { Subscription } from 'rxjs';
 
 interface NavChild {
   label: string;
-  route: string;
+  route?: string;
   description?: string;
   icon: string;
+  header?: boolean;
 }
 
 interface NavLink {
@@ -30,7 +31,7 @@ interface NavLink {
   imports: [CommonModule, RouterModule, MatIconModule, MatButtonModule],
   template: `
     <header
-      style="position: sticky; top: 0; z-index: 50; background: white; transition: box-shadow 0.3s, border-color 0.3s;"
+      style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: white; transition: box-shadow 0.3s, border-color 0.3s;"
       [style.borderBottom]="scrolled() ? '1px solid #e2e8f0' : '1px solid #f1f5f9'"
       [style.boxShadow]="scrolled() ? '0 4px 24px rgba(0,0,0,0.06)' : 'none'">
 
@@ -83,22 +84,30 @@ interface NavLink {
                   style="position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 8px; background: white; border-radius: 16px; border: 1px solid #f1f5f9; box-shadow: 0 24px 56px -12px rgba(0,0,0,0.16), 0 8px 24px -8px rgba(0,0,0,0.06); padding: 8px; min-width: 260px; z-index: 60;"
                   (mouseenter)="openDropdown(i)" (mouseleave)="closeDropdown(i)">
 
-                  <a *ngFor="let child of link.children; let ci = index"
-                    [routerLink]="routePath(child.route)"
-                    [queryParams]="routeQuery(child.route)"
-                    (click)="closeDropdown(i)"
-                    style="display: flex; align-items: center; gap: 14px; padding: 11px 14px; border-radius: 12px; text-decoration: none; transition: all 0.15s;"
-                    [style.marginTop]="ci > 0 ? '2px' : '0'"
-                    onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background=''">
-                    <div style="width: 36px; height: 36px; border-radius: 10px; background: #f0fdf4; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s;"
-                      onmouseover="this.style.background='#d1fae5'" onmouseout="this.style.background='#f0fdf4'">
-                      <span class="material-icons" style="font-size: 18px; color: #059669;">{{ child.icon }}</span>
+                  <ng-container *ngFor="let child of link.children; let ci = index">
+                    <div *ngIf="child.header"
+                      style="display: flex; align-items: center; gap: 8px; padding: 12px 14px 4px; font-size: 0.7rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.8px;"
+                      [style.marginTop]="ci > 0 ? '6px' : '0'">
+                      <span class="material-icons" style="font-size: 14px; color: #cbd5e1;">{{ child.icon }}</span>
+                      {{ child.label }}
                     </div>
-                    <div style="display: flex; flex-direction: column;">
-                      <span style="font-size: 0.85rem; font-weight: 600; color: #0f172a;">{{ child.label }}</span>
-                      <span *ngIf="child.description" style="font-size: 0.72rem; color: #94a3b8; margin-top: 1px;">{{ child.description }}</span>
-                    </div>
-                  </a>
+                    <a *ngIf="!child.header"
+                      [routerLink]="routePath(child.route!)"
+                      [queryParams]="routeQuery(child.route!)"
+                      (click)="closeDropdown(i)"
+                      style="display: flex; align-items: center; gap: 14px; padding: 11px 14px; border-radius: 12px; text-decoration: none; transition: all 0.15s;"
+                      [style.marginTop]="ci > 0 ? '2px' : '0'"
+                      onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background=''">
+                      <div style="width: 36px; height: 36px; border-radius: 10px; background: #f0fdf4; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s;"
+                        onmouseover="this.style.background='#d1fae5'" onmouseout="this.style.background='#f0fdf4'">
+                        <span class="material-icons" style="font-size: 18px; color: #059669;">{{ child.icon }}</span>
+                      </div>
+                      <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.85rem; font-weight: 600; color: #0f172a;">{{ child.label }}</span>
+                        <span *ngIf="child.description" style="font-size: 0.72rem; color: #94a3b8; margin-top: 1px;">{{ child.description }}</span>
+                      </div>
+                    </a>
+                  </ng-container>
                 </div>
               </div>
 
@@ -302,18 +311,25 @@ interface NavLink {
                 [style.transform]="mobileSubmenuOpen[i] ? 'rotate(180deg)' : ''">expand_more</span>
             </button>
             <div *ngIf="mobileSubmenuOpen[i]" style="background: #f8fafc; padding: 4px 0; margin: 0 12px; border-radius: 12px;">
-              <a *ngFor="let child of link.children"
-                [routerLink]="routePath(child.route)" [queryParams]="routeQuery(child.route)" (click)="mobileMenuOpen.set(false); mobileSubmenuOpen[i] = false"
-                style="display: flex; align-items: center; gap: 14px; padding: 11px 16px 11px 16px; font-size: 0.82rem; font-weight: 500; color: #64748b; text-decoration: none; transition: all 0.15s; border-radius: 8px;"
-                onmouseover="this.style.color='#059669'; this.style.background='#f0fdf4'" onmouseout="this.style.color='#64748b'; this.style.background='transparent'">
-                <div style="width: 28px; height: 28px; border-radius: 6px; background: #ecfdf5; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <span class="material-icons" style="font-size: 14px; color: #059669;">{{ child.icon }}</span>
+              <ng-container *ngFor="let child of link.children">
+                <div *ngIf="child.header"
+                  style="display: flex; align-items: center; gap: 8px; padding: 12px 16px 4px; font-size: 0.7rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.8px;">
+                  <span class="material-icons" style="font-size: 14px; color: #cbd5e1;">{{ child.icon }}</span>
+                  {{ child.label }}
                 </div>
-                <div style="display: flex; flex-direction: column;">
-                  <span>{{ child.label }}</span>
-                  <span *ngIf="child.description" style="font-size: 0.7rem; color: #94a3b8;">{{ child.description }}</span>
-                </div>
-              </a>
+                <a *ngIf="!child.header"
+                  [routerLink]="routePath(child.route!)" [queryParams]="routeQuery(child.route!)" (click)="mobileMenuOpen.set(false); mobileSubmenuOpen[i] = false"
+                  style="display: flex; align-items: center; gap: 14px; padding: 11px 16px 11px 16px; font-size: 0.82rem; font-weight: 500; color: #64748b; text-decoration: none; transition: all 0.15s; border-radius: 8px;"
+                  onmouseover="this.style.color='#059669'; this.style.background='#f0fdf4'" onmouseout="this.style.color='#64748b'; this.style.background='transparent'">
+                  <div style="width: 28px; height: 28px; border-radius: 6px; background: #ecfdf5; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <span class="material-icons" style="font-size: 14px; color: #059669;">{{ child.icon }}</span>
+                  </div>
+                  <div style="display: flex; flex-direction: column;">
+                    <span>{{ child.label }}</span>
+                    <span *ngIf="child.description" style="font-size: 0.7rem; color: #94a3b8;">{{ child.description }}</span>
+                  </div>
+                </a>
+              </ng-container>
             </div>
           </div>
 
@@ -421,7 +437,11 @@ export class CustomerHeaderComponent implements OnInit, OnDestroy {
         { label: 'About Us', route: '/about', description: 'Our story & values', icon: 'group' },
         { label: 'FAQ', route: '/faq', description: 'Frequently asked questions', icon: 'help' },
         { label: 'Contact', route: '/contact', description: 'Get in touch', icon: 'mail' },
-        { label: 'Blog', route: '/blog', description: 'Tiffin stories & tips', icon: 'article' },
+        { label: 'Legal', header: true, icon: 'gavel' },
+        { label: 'Privacy Policy', route: '/privacy-policy', description: 'How we handle your data', icon: 'privacy_tip' },
+        { label: 'Terms & Conditions', route: '/terms-and-conditions', description: 'Rules of using our service', icon: 'description' },
+        { label: 'Refund Policy', route: '/refund-policy', description: 'Refund terms & process', icon: 'currency_rupee' },
+        { label: 'Cancellation Policy', route: '/cancellation-policy', description: 'Order cancellation terms', icon: 'event_busy' },
       ],
     },
   ];

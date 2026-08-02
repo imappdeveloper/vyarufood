@@ -1,7 +1,8 @@
-import { Component, inject, OnInit, OnDestroy, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy, NgZone, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PincodeStateService } from '../../../../../core/services/pincode-state.service';
+import { LocationService } from '../../../../../core/services/location.service';
 
 @Component({
   selector: 'app-pincode-banner',
@@ -31,13 +32,24 @@ import { PincodeStateService } from '../../../../../core/services/pincode-state.
             Check
           }
         </button>
-        <button (click)="detectLocation()" title="Use my location"
+        <button (click)="detectLocation()" [disabled]="locationLoading()" title="Use my location"
           style="width: 2rem; height: 2rem; border-radius: 0.5rem; border: 1px solid #d1d5db; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0;"
-          onmouseover="this.style.borderColor='#059669'; this.style.background='#f0fdf4'" onmouseout="this.style.borderColor='#d1d5db'; this.style.background='white'">
-          <span class="material-icons" style="font-size: 1rem; color: #059669;">my_location</span>
+          onmouseover="if(!this.disabled){this.style.borderColor='#059669'; this.style.background='#f0fdf4'}" onmouseout="this.style.borderColor='#d1d5db'; this.style.background='white'">
+          @if (locationLoading()) {
+            <span class="material-icons" style="font-size: 1rem; color: #059669; animation: spin 1s linear infinite; display: inline-block;">refresh</span>
+          } @else {
+            <span class="material-icons" style="font-size: 1rem; color: #059669;">my_location</span>
+          }
         </button>
       </div>
     </div>
+
+    @if (locationError()) {
+      <div style="margin-top: 0.5rem; background: #fffbeb; border: 1px solid #fde68a; border-radius: 0.5rem; padding: 0.625rem 0.875rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span class="material-icons" style="color: #d97706; font-size: 1rem;">location_off</span>
+        <span style="font-size: 0.8rem; color: #92400e; flex: 1;">{{ locationError() }}</span>
+      </div>
+    }
 
     <!-- Result: Deliverable -->
     @if (pincodeState.pincodeResult()?.deliverable) {
@@ -123,6 +135,7 @@ import { PincodeStateService } from '../../../../../core/services/pincode-state.
 })
 export class PincodeBannerComponent implements OnInit, OnDestroy {
   pincodeState = inject(PincodeStateService);
+  private locationService = inject(LocationService);
   private ngZone = inject(NgZone);
   private cdr = inject(ChangeDetectorRef);
 
@@ -130,6 +143,8 @@ export class PincodeBannerComponent implements OnInit, OnDestroy {
   showRequestForm = false;
   requestName = '';
   requestPhone = '';
+  locationLoading = signal(false);
+  locationError = signal<string | null>(null);
 
   private timers: any[] = [];
 
@@ -163,7 +178,9 @@ export class PincodeBannerComponent implements OnInit, OnDestroy {
       const result = this.pincodeState.pincodeResult();
       if (result) {
         clearInterval(poll);
-        this.autoHide(result.deliverable ? 5000 : 10000);
+        if (result.deliverable) {
+          this.autoHide(5000);
+        }
       } else if (elapsed > 10000) {
         clearInterval(poll);
       }
@@ -186,24 +203,19 @@ export class PincodeBannerComponent implements OnInit, OnDestroy {
   }
 
   detectLocation(): void {
-    if (!navigator.geolocation) return;
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
-          .then(r => r.json())
-          .then(data => {
-            const pc = data?.address?.postcode;
-            if (pc && pc.length === 6) {
-              this.pincode = pc;
-              this.check();
-            }
-          })
-          .catch(() => {});
+    this.locationLoading.set(true);
+    this.locationError.set(null);
+    this.locationService.detectPincode().subscribe({
+      next: (pc) => {
+        this.locationLoading.set(false);
+        this.pincode = pc;
+        this.check();
       },
-      () => {},
-      { timeout: 8000 }
-    );
+      error: (e) => {
+        this.locationLoading.set(false);
+        this.locationError.set(this.locationService.friendlyError(e.message));
+      },
+    });
   }
 
   submitRequest(): void {

@@ -134,7 +134,7 @@ import { PaymentMethodSelectorComponent } from './components/payment-method-sele
           <div class="checkout-left-col" style="display: flex; flex-direction: column; gap: 1.25rem;">
 
             <!-- Address Selection -->
-            <div style="background: white; border-radius: 1rem; border: 1px solid #f1f5f9; overflow: hidden; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.06)'" onmouseout="this.style.boxShadow='none'">
+            <div class="co-address" style="background: white; border-radius: 1rem; border: 1px solid #f1f5f9; overflow: hidden; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.06)'" onmouseout="this.style.boxShadow='none'">
               <div style="padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;">
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                   <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center;">
@@ -167,7 +167,7 @@ import { PaymentMethodSelectorComponent } from './components/payment-method-sele
             </div>
 
             <!-- Contact Details -->
-            <div style="background: white; border-radius: 1rem; border: 1px solid #f1f5f9; overflow: hidden; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.06)'" onmouseout="this.style.boxShadow='none'">
+            <div class="co-contact" style="background: white; border-radius: 1rem; border: 1px solid #f1f5f9; overflow: hidden; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.06)'" onmouseout="this.style.boxShadow='none'">
               <div style="padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 0.5rem;">
                 <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center;">
                   <span class="material-icons" style="color: #059669; font-size: 1.1rem;">person</span>
@@ -203,7 +203,7 @@ import { PaymentMethodSelectorComponent } from './components/payment-method-sele
             </div>
 
             <!-- Delivery Details -->
-            <div style="background: white; border-radius: 1rem; border: 1px solid #f1f5f9; overflow: hidden; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.06)'" onmouseout="this.style.boxShadow='none'">
+            <div class="co-delivery" style="background: white; border-radius: 1rem; border: 1px solid #f1f5f9; overflow: hidden; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.06)'" onmouseout="this.style.boxShadow='none'">
               <div style="padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 0.5rem;">
                 <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center;">
                   <span class="material-icons" style="color: #059669; font-size: 1.1rem;">local_shipping</span>
@@ -243,7 +243,7 @@ import { PaymentMethodSelectorComponent } from './components/payment-method-sele
             </div>
 
             <!-- Payment Method -->
-            <div style="background: white; border-radius: 1rem; border: 1px solid #f1f5f9; overflow: hidden; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.06)'" onmouseout="this.style.boxShadow='none'">
+            <div class="co-payment" style="background: white; border-radius: 1rem; border: 1px solid #f1f5f9; overflow: hidden; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.06)'" onmouseout="this.style.boxShadow='none'">
               <div style="padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 0.5rem;">
                 <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center;">
                   <span class="material-icons" style="color: #059669; font-size: 1.1rem;">payment</span>
@@ -261,7 +261,7 @@ import { PaymentMethodSelectorComponent } from './components/payment-method-sele
             </div>
 
             <!-- Order Notes -->
-            <div style="background: white; border-radius: 1rem; border: 1px solid #f1f5f9; overflow: hidden; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.06)'" onmouseout="this.style.boxShadow='none'">
+            <div class="co-notes" style="background: white; border-radius: 1rem; border: 1px solid #f1f5f9; overflow: hidden; transition: box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 20px rgba(0,0,0,0.06)'" onmouseout="this.style.boxShadow='none'">
               <div style="padding: 1rem 1.25rem; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 0.5rem;">
                 <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #d1fae5, #a7f3d0); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center;">
                   <span class="material-icons" style="color: #059669; font-size: 1.1rem;">note</span>
@@ -351,7 +351,7 @@ import { PaymentMethodSelectorComponent } from './components/payment-method-sele
                 </div>
 
                 <!-- Place Order Button -->
-                <button (click)="checkout.placeOrder()" [disabled]="!checkout.canPlaceOrder()"
+                <button class="checkout-place-btn" (click)="checkout.placeOrder()" [disabled]="!checkout.canPlaceOrder()"
                   style="width: 100%; margin-top: 1rem; padding: 0.875rem 1.5rem; background: linear-gradient(135deg, #059669, #10b981); color: white; font-weight: 700; font-size: 0.95rem; border-radius: 0.75rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; box-shadow: 0 4px 15px rgba(5,150,105,0.3);"
                   onmouseover="if(!this.disabled){this.style.transform='translateY(-1px)'; this.style.boxShadow='0 6px 20px rgba(5,150,105,0.4)'}"
                   onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 15px rgba(5,150,105,0.3)'"
@@ -382,19 +382,113 @@ import { PaymentMethodSelectorComponent } from './components/payment-method-sele
             </div>
           </div>
         </div>
+
+        <!-- Mobile bottom spacer so sticky bar never covers content -->
+        <div class="checkout-bottom-bar-spacer"></div>
+      </div>
+
+      <!-- Mobile sticky bottom bar: total + Place Order (above bottom nav) -->
+      <div class="checkout-bottom-bar">
+        <div class="cbb-left">
+          <span class="cbb-label">To Pay</span>
+          <span class="cbb-total">&#8377;{{ (checkout.summary()?.cart?.total_amount || 0).toFixed(2) }}</span>
+        </div>
+        <button class="cbb-btn" (click)="checkout.placeOrder()" [disabled]="!checkout.canPlaceOrder()">
+          @if (checkout.processing()) {
+            <span class="material-icons" style="font-size:1.1rem; animation:spin 1s linear infinite;">refresh</span>
+            <span>Processing...</span>
+          } @else {
+            <span class="material-icons" style="font-size:1.05rem;">lock</span>
+            <span>Place Order</span>
+          }
+        </button>
       </div>
     }
   `,
   styles: [`
     :host { display: block; }
+    .checkout-bottom-bar,
+    .checkout-bottom-bar-spacer { display: none; }
+
     @media (min-width: 1024px) {
       .checkout-grid { grid-template-columns: 1fr 380px !important; }
       .checkout-left-col { min-width: 0; }
       .checkout-right-col { position: sticky; top: 1rem; align-self: start; }
     }
-    @media (max-width: 1023px) {
-      .checkout-right-col { order: -1; }
+
+    @media (max-width: 1023.98px) {
+      /* Natural flow: forms first, summary + place order at the bottom */
+      .checkout-left-col > .co-address { order: 1; }
+      .checkout-left-col > .co-contact { order: 2; }
+      .checkout-left-col > .co-delivery { order: 3; }
+      .checkout-left-col > .co-notes { order: 4; }
+      .checkout-left-col > .co-payment { order: 5; }
+
+      .checkout-right-col > div { position: static !important; }
+
+      /* In-card place order button is redundant on mobile (sticky bar has it) */
+      .checkout-place-btn { display: none !important; }
+
+      .checkout-bottom-bar-spacer { display: block; height: 72px; }
+
+      .checkout-bottom-bar {
+        display: flex;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: calc(60px + env(safe-area-inset-bottom));
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 16px;
+        background: rgba(255, 255, 255, 0.97);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-top: 1px solid #e2e8f0;
+        box-shadow: 0 -6px 24px rgba(15, 23, 42, 0.08);
+        z-index: 80;
+      }
+
+      .cbb-left {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.25;
+        flex-shrink: 0;
+      }
+      .cbb-label {
+        font-size: 0.68rem;
+        color: #64748b;
+        font-weight: 600;
+      }
+      .cbb-total {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: #059669;
+      }
+      .cbb-btn {
+        flex: 1;
+        max-width: 220px;
+        padding: 0.8rem 1.25rem;
+        background: linear-gradient(135deg, #059669, #10b981);
+        color: white;
+        font-weight: 700;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 999px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35);
+        transition: opacity 0.2s;
+      }
+      .cbb-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
     }
+
     @keyframes pulse {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.5; }

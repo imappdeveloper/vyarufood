@@ -28,6 +28,7 @@ class UpdateCustomerAddressRequest extends FormRequest
             'state_id' => 'sometimes|integer|exists:states,id',
             'city_id' => 'sometimes|integer|exists:cities,id',
             'area_id' => 'nullable|integer|exists:areas,id',
+            'pincode' => 'nullable|string|max:10',
             'pincode_id' => 'nullable|integer|exists:pincodes,id',
             'latitude' => 'nullable|numeric|between:-90,90',
             'longitude' => 'nullable|numeric|between:-180,180',

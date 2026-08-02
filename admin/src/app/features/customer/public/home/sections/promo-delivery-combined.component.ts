@@ -1,8 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { CustomerBrowseApiService, PincodeCheckResponse } from '../../../../../core/services/customer-browse-api.service';
+import { PincodeCheckResponse } from '../../../../../core/services/customer-browse-api.service';
+import { PincodeStateService } from '../../../../../core/services/pincode-state.service';
+import { LocationService } from '../../../../../core/services/location.service';
 
 @Component({
   selector: 'app-promo-delivery-combined',
@@ -80,6 +82,17 @@ import { CustomerBrowseApiService, PincodeCheckResponse } from '../../../../../c
                   class="w-full py-2.5 pl-9 pr-3 rounded-xl bg-white text-slate-900 text-sm font-medium outline-none shadow-md focus:shadow-lg transition-shadow duration-300"
                 />
               </div>
+              <button type="button"
+                      (click)="detectLocation()"
+                      [disabled]="locationLoading()"
+                      title="Use my location"
+                      class="px-3 py-2.5 bg-white text-emerald-700 font-semibold text-sm rounded-xl shadow-md hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0 transition-all duration-300 cursor-pointer inline-flex items-center justify-center whitespace-nowrap">
+                @if (locationLoading()) {
+                  <span class="material-icons text-lg animate-spin">refresh</span>
+                } @else {
+                  <span class="material-icons text-lg">my_location</span>
+                }
+              </button>
               <button type="submit"
                       [disabled]="checking()"
                       class="px-4 py-2.5 bg-white text-slate-900 font-semibold text-sm rounded-xl shadow-md hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0 transition-all duration-300 cursor-pointer inline-flex items-center justify-center whitespace-nowrap">
@@ -90,6 +103,10 @@ import { CustomerBrowseApiService, PincodeCheckResponse } from '../../../../../c
                 }
               </button>
             </form>
+
+            @if (locationError()) {
+              <p class="mt-2 text-xs text-yellow-100 bg-white/10 rounded-lg px-3 py-2 leading-relaxed">{{ locationError() }}</p>
+            }
 
             @if (result()) {
               <div class="mt-3 p-3.5 rounded-xl backdrop-blur-sm animate-[cResultPop_0.3s_ease-out_both]"
@@ -158,28 +175,42 @@ import { CustomerBrowseApiService, PincodeCheckResponse } from '../../../../../c
     }
   `],
 })
-export class PromoDeliveryCombinedComponent {
-  private browseApi = inject(CustomerBrowseApiService);
+export class PromoDeliveryCombinedComponent implements OnInit {
+  private locationService = inject(LocationService);
+  pincodeState = inject(PincodeStateService);
   pincode = '';
-  checking = signal(false);
-  result = signal<PincodeCheckResponse | null>(null);
+  localError = signal<PincodeCheckResponse | null>(null);
+  checking = computed(() => this.pincodeState.checking());
+  result = computed(() => this.localError() ?? this.pincodeState.pincodeResult());
+  locationLoading = signal(false);
+  locationError = signal<string | null>(null);
+
+  ngOnInit(): void {
+    this.pincode = this.pincodeState.selectedPincode();
+  }
 
   checkDelivery(): void {
     const pc = this.pincode.trim();
     if (pc.length !== 6 || !/^\d{6}$/.test(pc)) {
-      this.result.set({ deliverable: false, pincode: pc, message: 'Please enter a valid 6-digit pincode.' });
+      this.localError.set({ deliverable: false, pincode: pc, message: 'Please enter a valid 6-digit pincode.' });
       return;
     }
-    this.checking.set(true);
-    this.result.set(null);
-    this.browseApi.checkPincode(pc).subscribe({
-      next: (res) => {
-        this.checking.set(false);
-        if (res.success && res.data) this.result.set(res.data);
+    this.localError.set(null);
+    this.pincodeState.checkPincode(pc);
+  }
+
+  detectLocation(): void {
+    this.locationLoading.set(true);
+    this.locationError.set(null);
+    this.locationService.detectPincode().subscribe({
+      next: (pc) => {
+        this.locationLoading.set(false);
+        this.pincode = pc;
+        this.checkDelivery();
       },
-      error: () => {
-        this.checking.set(false);
-        this.result.set({ deliverable: false, pincode: pc, message: 'Unable to check availability. Please try again.' });
+      error: (e) => {
+        this.locationLoading.set(false);
+        this.locationError.set(this.locationService.friendlyError(e.message));
       },
     });
   }
