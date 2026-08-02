@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, RouterModule],
   template: `
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16" aria-label="Get started">
-      <div class="bg-gradient-to-r from-orange-500 to-red-500 rounded-3xl p-10 sm:p-12 lg:p-16 text-center text-white relative overflow-hidden">
+      <div class="bg-gradient-to-r from-orange-500 to-red-500 rounded-3xl p-10 sm:p-12 lg:p-16 text-center text-white relative overflow-hidden shadow-2xl shadow-orange-500/20">
         <div class="absolute inset-0 opacity-10">
           <div class="absolute top-10 left-20 w-40 h-40 bg-white rounded-full blur-3xl"></div>
           <div class="absolute bottom-10 right-20 w-56 h-56 bg-yellow-300 rounded-full blur-3xl"></div>

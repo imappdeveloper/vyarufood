@@ -6,11 +6,20 @@ import { AppStateService } from './app-state.service';
 import { CustomerProfile } from '../models/customer/customer-profile.model';
 import { ApiResponse } from '../interfaces/api-response.interface';
 import { CustomerAuthResponse } from '../interfaces/customer-auth-response.interface';
+import { CustomerGoogleAuthResponse } from '../interfaces/customer-google-auth-response.interface';
+
+export interface GoogleProfileInfo {
+  name: string;
+  email: string;
+  photo: string | null;
+}
 
 @Injectable({ providedIn: 'root' })
 export class CustomerAuthService {
   private authApi = inject(CustomerAuthApiService);
   private appState = inject(AppStateService);
+
+  private pendingGoogleProfile: GoogleProfileInfo | null = null;
 
   get currentUser$(): Observable<CustomerProfile | null> {
     return this.authApi.currentUser$;
@@ -22,6 +31,24 @@ export class CustomerAuthService {
 
   get isLoggedIn(): boolean {
     return this.authApi.isLoggedIn;
+  }
+
+  setPendingGoogleProfile(profile: GoogleProfileInfo | null): void {
+    this.pendingGoogleProfile = profile;
+  }
+
+  getPendingGoogleProfile(): GoogleProfileInfo | null {
+    return this.pendingGoogleProfile;
+  }
+
+  googleLogin(idToken: string): Observable<ApiResponse<CustomerGoogleAuthResponse>> {
+    return this.authApi.googleLogin(idToken).pipe(
+      tap((response) => {
+        if (response.success && response.data) {
+          this.appState.setCurrentUser(response.data.customer);
+        }
+      })
+    );
   }
 
   login(credentials: { email: string; password: string; remember_me?: boolean }): Observable<ApiResponse<CustomerAuthResponse>> {
@@ -66,8 +93,8 @@ export class CustomerAuthService {
     return this.authApi.registerSendOtp(phone);
   }
 
-  verifyOtpLogin(phone: string, otp: string): Observable<ApiResponse<CustomerAuthResponse>> {
-    return this.authApi.verifyOtpLogin(phone, otp).pipe(
+  verifyOtpLogin(phone: string, otp: string, firebaseToken?: string): Observable<ApiResponse<CustomerAuthResponse>> {
+    return this.authApi.verifyOtpLogin(phone, otp, firebaseToken).pipe(
       tap((response) => {
         if (response.success && response.data) {
           this.appState.setCurrentUser(response.data.customer);
@@ -76,8 +103,8 @@ export class CustomerAuthService {
     );
   }
 
-  registerVerifyOtp(data: { phone: string; otp: string; first_name?: string; last_name?: string; email?: string }): Observable<ApiResponse<CustomerAuthResponse>> {
-    return this.authApi.registerVerifyOtp(data).pipe(
+  registerVerifyOtp(data: { phone: string; otp: string; first_name?: string; last_name?: string; email?: string }, firebaseToken?: string): Observable<ApiResponse<CustomerAuthResponse>> {
+    return this.authApi.registerVerifyOtp(data, firebaseToken).pipe(
       tap((response) => {
         if (response.success && response.data) {
           this.appState.setCurrentUser(response.data.customer);

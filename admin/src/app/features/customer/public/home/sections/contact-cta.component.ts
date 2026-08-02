@@ -15,7 +15,7 @@ import { RouterModule } from '@angular/router';
               <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-sm font-bold mb-4 border border-white/10">
                 <span class="material-icons text-sm text-orange-400">support_agent</span> Get in Touch
               </span>
-              <h2 class="text-2xl sm:text-3xl font-extrabold mb-3">Need Help?</h2>
+              <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold mb-3">Need Help?</h2>
               <p class="text-slate-300 text-sm sm:text-base mb-8 leading-relaxed">Have questions, feedback, or need help with your order? We're here for you. Reach out anytime!</p>
 
               <div class="space-y-3">

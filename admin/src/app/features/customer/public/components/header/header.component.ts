@@ -84,7 +84,8 @@ interface NavLink {
                   (mouseenter)="openDropdown(i)" (mouseleave)="closeDropdown(i)">
 
                   <a *ngFor="let child of link.children; let ci = index"
-                    [routerLink]="child.route"
+                    [routerLink]="routePath(child.route)"
+                    [queryParams]="routeQuery(child.route)"
                     (click)="closeDropdown(i)"
                     style="display: flex; align-items: center; gap: 14px; padding: 11px 14px; border-radius: 12px; text-decoration: none; transition: all 0.15s;"
                     [style.marginTop]="ci > 0 ? '2px' : '0'"
@@ -143,16 +144,11 @@ interface NavLink {
             <!-- Logged Out -->
             <ng-container *ngIf="!isLoggedIn()">
               <a routerLink="/login"
-                [style.display]="isDesktop() ? 'inline-flex' : 'none'"
-                style="padding: 7px 18px; font-size: 0.82rem; font-weight: 600; color: #059669; border-radius: 999px; text-decoration: none; transition: all 0.2s;"
-                onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='transparent'">
-                Log in
-              </a>
-              <a routerLink="/register"
-                style="display: inline-flex; align-items: center; padding: 7px 20px; font-size: 0.82rem; font-weight: 600; color: white; background: linear-gradient(135deg, #059669, #10b981); border-radius: 999px; text-decoration: none; transition: all 0.25s; box-shadow: 0 2px 8px rgba(5,150,105,0.2);"
+                style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 22px; font-size: 0.85rem; font-weight: 700; color: white; background: linear-gradient(135deg, #059669, #10b981); border-radius: 999px; text-decoration: none; transition: all 0.25s; box-shadow: 0 2px 8px rgba(5,150,105,0.2);"
                 onmouseover="this.style.boxShadow='0 6px 20px rgba(5,150,105,0.35)'; this.style.transform='translateY(-1px)'"
                 onmouseout="this.style.boxShadow='0 2px 8px rgba(5,150,105,0.2)'; this.style.transform='none'">
-                Sign Up
+                <span class="material-icons" style="font-size: 18px;">shopping_bag</span>
+                Order Now
               </a>
             </ng-container>
 
@@ -284,18 +280,12 @@ interface NavLink {
       </div>
 
       <div *ngIf="!isLoggedIn()" style="padding: 18px 20px; border-bottom: 1px solid #f1f5f9;">
-        <div style="display: flex; gap: 10px;">
-          <a routerLink="/login" (click)="mobileMenuOpen.set(false)"
-            style="flex: 1; text-align: center; padding: 11px; font-size: 0.85rem; font-weight: 600; color: #059669; border: 1.5px solid #d1fae5; border-radius: 999px; text-decoration: none; transition: all 0.15s;"
-            onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='transparent'">
-            Log in
-          </a>
-          <a routerLink="/register" (click)="mobileMenuOpen.set(false)"
-            style="flex: 1; text-align: center; padding: 11px; font-size: 0.85rem; font-weight: 600; color: white; background: linear-gradient(135deg, #059669, #10b981); border-radius: 999px; text-decoration: none; box-shadow: 0 2px 8px rgba(5,150,105,0.2); transition: all 0.15s;"
-            onmouseover="this.style.boxShadow='0 4px 14px rgba(5,150,105,0.3)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(5,150,105,0.2)'">
-            Sign Up
-          </a>
-        </div>
+        <a routerLink="/login" (click)="mobileMenuOpen.set(false)"
+          style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; font-size: 0.88rem; font-weight: 700; color: white; background: linear-gradient(135deg, #059669, #10b981); border-radius: 999px; text-decoration: none; box-shadow: 0 2px 8px rgba(5,150,105,0.2); transition: all 0.15s;"
+          onmouseover="this.style.boxShadow='0 4px 14px rgba(5,150,105,0.3)'" onmouseout="this.style.boxShadow='0 2px 8px rgba(5,150,105,0.2)'">
+          <span class="material-icons" style="font-size: 18px;">shopping_bag</span>
+          Order Now
+        </a>
       </div>
 
       <nav style="flex: 1; overflow-y: auto; padding: 8px 0;" aria-label="Mobile navigation">
@@ -313,7 +303,7 @@ interface NavLink {
             </button>
             <div *ngIf="mobileSubmenuOpen[i]" style="background: #f8fafc; padding: 4px 0; margin: 0 12px; border-radius: 12px;">
               <a *ngFor="let child of link.children"
-                [routerLink]="child.route" (click)="mobileMenuOpen.set(false); mobileSubmenuOpen[i] = false"
+                [routerLink]="routePath(child.route)" [queryParams]="routeQuery(child.route)" (click)="mobileMenuOpen.set(false); mobileSubmenuOpen[i] = false"
                 style="display: flex; align-items: center; gap: 14px; padding: 11px 16px 11px 16px; font-size: 0.82rem; font-weight: 500; color: #64748b; text-decoration: none; transition: all 0.15s; border-radius: 8px;"
                 onmouseover="this.style.color='#059669'; this.style.background='#f0fdf4'" onmouseout="this.style.color='#64748b'; this.style.background='transparent'">
                 <div style="width: 28px; height: 28px; border-radius: 6px; background: #ecfdf5; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
@@ -414,7 +404,7 @@ export class CustomerHeaderComponent implements OnInit, OnDestroy {
       label: 'Meals', icon: 'restaurant_menu',
       children: [
         { label: 'All Meals', route: '/meals', description: 'Browse our full menu', icon: 'restaurant' },
-        { label: "Today's Special", route: '/meals?is_featured=1', description: 'Chef recommended dishes', icon: 'star' },
+        { label: "Today's Special", route: '/meals?featured=1', description: 'Chef recommended dishes', icon: 'star' },
       ],
     },
     {
@@ -506,6 +496,21 @@ export class CustomerHeaderComponent implements OnInit, OnDestroy {
 
   toggleMobileSubmenu(index: number): void {
     this.mobileSubmenuOpen[index] = !this.mobileSubmenuOpen[index];
+  }
+
+  routePath(route: string): string {
+    return route.split('?')[0];
+  }
+
+  routeQuery(route: string): Record<string, string> {
+    const query = route.split('?')[1];
+    if (!query) return {};
+    const params: Record<string, string> = {};
+    query.split('&').forEach((pair) => {
+      const [key, value] = pair.split('=');
+      if (key) params[decodeURIComponent(key)] = decodeURIComponent(value ?? '');
+    });
+    return params;
   }
 
   logout(): void {

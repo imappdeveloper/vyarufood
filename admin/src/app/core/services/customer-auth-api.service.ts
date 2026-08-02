@@ -4,6 +4,7 @@ import { Observable, tap, BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ApiResponse } from '../interfaces/api-response.interface';
 import { CustomerAuthResponse } from '../interfaces/customer-auth-response.interface';
+import { CustomerGoogleAuthResponse } from '../interfaces/customer-google-auth-response.interface';
 import { CustomerProfile } from '../models/customer/customer-profile.model';
 
 @Injectable({ providedIn: 'root' })
@@ -46,6 +47,16 @@ export class CustomerAuthApiService {
     );
   }
 
+  googleLogin(idToken: string): Observable<ApiResponse<CustomerGoogleAuthResponse>> {
+    return this.http.post<ApiResponse<CustomerGoogleAuthResponse>>(`${this.apiUrl}/google-login`, { id_token: idToken }, { withCredentials: true }).pipe(
+      tap((response) => {
+        if (response.success && response.data) {
+          this.setSession(response.data);
+        }
+      })
+    );
+  }
+
   verifyOtp(otp: string): Observable<ApiResponse<CustomerAuthResponse>> {
     return this.http.post<ApiResponse<CustomerAuthResponse>>(`${this.apiUrl}/verify-otp`, { otp }, { withCredentials: true }).pipe(
       tap((response) => {
@@ -68,8 +79,10 @@ export class CustomerAuthApiService {
     return this.http.post<ApiResponse<{ otp: string }>>(`${this.apiUrl}/register-send-otp`, { phone }, { withCredentials: true });
   }
 
-  verifyOtpLogin(phone: string, otp: string): Observable<ApiResponse<CustomerAuthResponse>> {
-    return this.http.post<ApiResponse<CustomerAuthResponse>>(`${this.apiUrl}/verify-login-otp`, { phone, otp }, { withCredentials: true }).pipe(
+  verifyOtpLogin(phone: string, otp: string, firebaseToken?: string): Observable<ApiResponse<CustomerAuthResponse>> {
+    const body: Record<string, string> = { phone, otp };
+    if (firebaseToken) body['firebase_token'] = firebaseToken;
+    return this.http.post<ApiResponse<CustomerAuthResponse>>(`${this.apiUrl}/verify-login-otp`, body, { withCredentials: true }).pipe(
       tap((response) => {
         if (response.success && response.data) {
           this.setSession(response.data);
@@ -78,8 +91,10 @@ export class CustomerAuthApiService {
     );
   }
 
-  registerVerifyOtp(data: { phone: string; otp: string; first_name?: string; last_name?: string; email?: string }): Observable<ApiResponse<CustomerAuthResponse>> {
-    return this.http.post<ApiResponse<CustomerAuthResponse>>(`${this.apiUrl}/register-verify-otp`, data, { withCredentials: true }).pipe(
+  registerVerifyOtp(data: { phone: string; otp: string; first_name?: string; last_name?: string; email?: string }, firebaseToken?: string): Observable<ApiResponse<CustomerAuthResponse>> {
+    const body: Record<string, any> = { ...data };
+    if (firebaseToken) body['firebase_token'] = firebaseToken;
+    return this.http.post<ApiResponse<CustomerAuthResponse>>(`${this.apiUrl}/register-verify-otp`, body, { withCredentials: true }).pipe(
       tap((response) => {
         if (response.success && response.data) {
           this.setSession(response.data);

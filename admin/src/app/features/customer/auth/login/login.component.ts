@@ -1,14 +1,13 @@
-import { Component, inject, signal, OnDestroy } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { CustomerAuthService } from '../../../../core/services/customer-auth.service';
-import { Subscription, interval } from 'rxjs';
+import { FirebaseOtpService } from '../../../../core/services/firebase-otp.service';
 
 @Component({
   selector: 'app-customer-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, RouterModule],
   template: `
     <div class="min-h-[80vh] flex items-center justify-center px-4 py-8">
       <div class="w-full max-w-md">
@@ -18,312 +17,94 @@ import { Subscription, interval } from 'rxjs';
             <span class="material-icons text-emerald-600 text-3xl">restaurant_menu</span>
             <span class="text-2xl font-bold text-gray-900">Vyaru Tiffin</span>
           </a>
-          <h1 class="text-2xl font-bold text-gray-900">
-            {{ step() === 'phone' ? 'Welcome Back' : 'Enter OTP' }}
-          </h1>
-          <p class="text-gray-500 mt-1">
-            {{ step() === 'phone' ? 'Sign in with your mobile number' : 'Verification code sent to ' + phone() }}
-          </p>
+          <h1 class="text-2xl font-bold text-gray-900">Welcome Back</h1>
+          <p class="text-gray-500 mt-1">Sign in to continue your order</p>
         </div>
 
         <div class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
-          <!-- Step 1: Phone Input -->
-          @if (step() === 'phone') {
-            <form [formGroup]="phoneForm" (ngSubmit)="onSendOtp()">
-              <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
-                <div class="flex gap-2">
-                  <div class="w-20 flex-shrink-0">
-                    <input
-                      formControlName="country_code"
-                      type="text"
-                      class="w-full px-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-center"
-                      placeholder="+91" />
-                  </div>
-                  <div class="flex-1">
-                    <input
-                      formControlName="phone"
-                      type="tel"
-                      class="w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
-                      [class.border-red-300]="isPhoneInvalid"
-                      [class.border-gray-200]="!isPhoneInvalid"
-                      placeholder="Enter 10-digit mobile number"
-                      maxlength="10" />
-                  </div>
-                </div>
-                @if (isPhoneInvalid) {
-                  <p class="mt-1 text-xs text-red-500">Please enter a valid 10-digit mobile number.</p>
-                }
-              </div>
+          <button
+            type="button"
+            (click)="loginWithGoogle()"
+            [disabled]="loading()"
+            class="w-full flex items-center justify-center gap-3 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-colors font-semibold text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed">
+            @if (loading()) {
+              <svg class="animate-spin h-5 w-5 text-gray-400" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+              Signing in...
+            } @else {
+              <svg width="20" height="20" viewBox="0 0 48 48">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+              </svg>
+              Continue with Google
+            }
+          </button>
 
-              @if (error()) {
-                <div class="mb-4 p-3 bg-red-50 text-red-600 text-sm rounded-xl flex items-center gap-2">
-                  <span class="material-icons text-lg">error_outline</span>
-                  {{ error() }}
-                </div>
-              }
-
-              <button
-                type="submit"
-                [disabled]="loading()"
-                class="w-full py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-                @if (loading()) {
-                  <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-                  Sending OTP...
-                } @else {
-                  <span class="material-icons text-lg">send</span>
-                  Send OTP
-                }
-              </button>
-            </form>
-          }
-
-          <!-- Step 2: OTP Verification -->
-          @if (step() === 'otp') {
-            <!-- Auto-filled OTP display -->
-            <div class="mb-4 p-3 bg-emerald-50 text-emerald-700 text-sm rounded-xl flex items-center gap-2">
-              <span class="material-icons text-lg">info_outline</span>
-              Testing mode: OTP auto-filled — {{ autoOtp() }}
+          @if (error()) {
+            <div class="mt-4 p-3 bg-red-50 text-red-600 text-sm rounded-xl flex items-center gap-2">
+              <span class="material-icons text-lg">error_outline</span>
+              {{ error() }}
             </div>
-
-            <form [formGroup]="otpForm" (ngSubmit)="onVerifyOtp()">
-              <div class="flex gap-3 justify-center mb-6">
-                @for (digit of otpDigits; track digit; let i = $index) {
-                  <input
-                    #otpInput
-                    [id]="'otp-' + i"
-                    maxlength="1"
-                    [formControlName]="digit"
-                    type="text"
-                    inputmode="numeric"
-                    autocomplete="one-time-code"
-                    (input)="onDigitInput(i, $event)"
-                    (keydown)="onKeyDown(i, $event)"
-                    (paste)="onPaste($event)"
-                    class="w-12 h-14 text-center text-xl font-bold border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
-                    [class.border-red-300]="otpForm.get(digit)?.invalid && otpForm.get(digit)?.touched"
-                    [class.border-gray-200]="!otpForm.get(digit)?.invalid || !otpForm.get(digit)?.touched" />
-                }
-              </div>
-
-              @if (error()) {
-                <div class="mb-4 p-3 bg-red-50 text-red-600 text-sm rounded-xl flex items-center gap-2">
-                  <span class="material-icons text-lg">error_outline</span>
-                  {{ error() }}
-                </div>
-              }
-
-              @if (success()) {
-                <div class="mb-4 p-3 bg-green-50 text-green-600 text-sm rounded-xl flex items-center gap-2">
-                  <span class="material-icons text-lg">check_circle</span>
-                  {{ success() }}
-                </div>
-              }
-
-              <button
-                type="submit"
-                [disabled]="loading() || fullOtp.length !== 6"
-                class="w-full py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-                @if (loading()) {
-                  <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-                  Verifying...
-                } @else {
-                  <span class="material-icons text-lg">verified</span>
-                  Verify & Sign In
-                }
-              </button>
-
-              <div class="mt-6 flex items-center justify-between">
-                <button type="button" (click)="goBack()" class="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1">
-                  <span class="material-icons text-base">arrow_back</span> Change number
-                </button>
-                @if (resendCountdown() > 0) {
-                  <p class="text-sm text-gray-500">Resend in <span class="font-semibold text-emerald-600">{{ resendCountdown() }}s</span></p>
-                } @else {
-                  <button type="button" (click)="onResend()" [disabled]="resendLoading()" class="text-sm text-emerald-600 font-medium hover:text-emerald-700 disabled:opacity-50">
-                    {{ resendLoading() ? 'Sending...' : 'Resend OTP' }}
-                  </button>
-                }
-              </div>
-            </form>
           }
         </div>
 
         <div class="mt-6 text-center text-sm text-gray-500">
-          Don't have an account? <a routerLink="/register" class="text-emerald-600 font-medium hover:text-emerald-700">Sign Up</a>
+          New to Vyaru Tiffin? <a routerLink="/register" class="text-emerald-600 font-medium hover:text-emerald-700">Create an account</a>
         </div>
       </div>
     </div>
   `,
 })
-export class LoginComponent implements OnDestroy {
-  private fb = inject(FormBuilder);
+export class LoginComponent {
   private authService = inject(CustomerAuthService);
+  private firebaseOtp = inject(FirebaseOtpService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
-  phoneForm = this.fb.group({
-    country_code: ['+91'],
-    phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
-  });
-
-  otpDigits = ['d1', 'd2', 'd3', 'd4', 'd5', 'd6'];
-  otpForm = this.fb.group({
-    d1: ['', [Validators.required]],
-    d2: ['', [Validators.required]],
-    d3: ['', [Validators.required]],
-    d4: ['', [Validators.required]],
-    d5: ['', [Validators.required]],
-    d6: ['', [Validators.required]],
-  });
-
-  step = signal<'phone' | 'otp'>('phone');
-  phone = signal('');
   loading = signal(false);
   error = signal('');
-  success = signal('');
-  resendLoading = signal(false);
-  resendCountdown = signal(0);
-  autoOtp = signal('');
-  private countdownSub?: Subscription;
 
-  get isPhoneInvalid(): boolean {
-    const control = this.phoneForm.get('phone');
-    return !!(control && control.invalid && (control.dirty || control.touched));
-  }
-
-  get fullOtp(): string {
-    return this.otpDigits.map(d => this.otpForm.get(d)?.value || '').join('');
-  }
-
-  ngOnDestroy(): void {
-    this.countdownSub?.unsubscribe();
-  }
-
-  onSendOtp(): void {
-    if (this.phoneForm.invalid) {
-      this.phoneForm.markAllAsTouched();
-      return;
-    }
+  async loginWithGoogle(): Promise<void> {
+    if (this.loading()) return;
     this.loading.set(true);
     this.error.set('');
 
-    const phone = this.phoneForm.get('phone')!.value!;
-    this.authService.sendOtp(phone).subscribe({
-      next: (res) => {
-        this.loading.set(false);
-        if (res.success && res.data) {
-          this.phone.set(phone);
-          this.autoOtp.set(res.data.otp || '');
-          this.step.set('otp');
-          this.startCountdown();
-          setTimeout(() => {
-            this.autoFillOtp(res.data?.otp || '');
-          }, 300);
-        }
-      },
-      error: (err: any) => {
-        this.loading.set(false);
-        this.error.set(err.error?.message || 'Failed to send OTP. Please try again.');
-      },
-    });
-  }
+    try {
+      const result = await this.firebaseOtp.signInWithGoogle();
 
-  autoFillOtp(otp: string): void {
-    if (!otp || otp.length !== 6) return;
-    this.otpDigits.forEach((d, i) => this.otpForm.get(d)?.setValue(otp[i]));
-    setTimeout(() => this.onVerifyOtp(), 500);
-  }
-
-  onVerifyOtp(): void {
-    if (this.fullOtp.length !== 6) return;
-    this.loading.set(true);
-    this.error.set('');
-
-    this.authService.verifyOtpLogin(this.phone(), this.fullOtp).subscribe({
-      next: () => {
-        this.success.set('Login successful! Redirecting...');
-        setTimeout(() => {
-          const returnUrl = this.route.snapshot.queryParams['returnUrl'];
-          if (returnUrl && returnUrl.startsWith('/')) {
-            this.router.navigateByUrl(returnUrl);
-          } else {
-            this.router.navigate(['/']);
+      this.authService.googleLogin(result.idToken).subscribe({
+        next: (res) => {
+          this.loading.set(false);
+          if (res.success && res.data) {
+            if (res.data.is_new) {
+              this.authService.setPendingGoogleProfile({
+                name: result.name,
+                email: result.email,
+                photo: result.photo,
+              });
+              this.router.navigate(['/register']);
+            } else {
+              const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+              if (returnUrl && returnUrl.startsWith('/')) {
+                this.router.navigateByUrl(returnUrl);
+              } else {
+                this.router.navigate(['/']);
+              }
+            }
           }
-        }, 800);
-      },
-      error: (err: any) => {
-        this.loading.set(false);
-        this.error.set(err.error?.message || 'Invalid or expired OTP. Please try again.');
-        this.otpDigits.forEach(d => this.otpForm.get(d)?.setValue(''));
-        document.getElementById('otp-0')?.focus();
-      },
-    });
-  }
-
-  onDigitInput(index: number, event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const value = input.value.replace(/\D/g, '');
-    this.otpForm.get(this.otpDigits[index])?.setValue(value.slice(0, 1));
-    if (value && index < 5) {
-      const next = document.getElementById('otp-' + (index + 1));
-      next?.focus();
-    }
-    this.error.set('');
-  }
-
-  onKeyDown(index: number, event: KeyboardEvent): void {
-    if (event.key === 'Backspace' && !this.otpForm.get(this.otpDigits[index])?.value && index > 0) {
-      const prev = document.getElementById('otp-' + (index - 1));
-      prev?.focus();
-    }
-  }
-
-  onPaste(event: ClipboardEvent): void {
-    event.preventDefault();
-    const pasted = event.clipboardData?.getData('text')?.replace(/\D/g, '') || '';
-    if (pasted.length >= 6) {
-      this.otpDigits.forEach((d, i) => this.otpForm.get(d)?.setValue(pasted[i]));
-      document.getElementById('otp-5')?.focus();
-    }
-  }
-
-  goBack(): void {
-    this.step.set('phone');
-    this.error.set('');
-    this.success.set('');
-    this.countdownSub?.unsubscribe();
-  }
-
-  onResend(): void {
-    this.resendLoading.set(true);
-    this.error.set('');
-
-    this.authService.sendOtp(this.phone()).subscribe({
-      next: (res) => {
-        this.resendLoading.set(false);
-        if (res.success && res.data) {
-          this.autoOtp.set(res.data.otp || '');
-          this.startCountdown();
-          this.autoFillOtp(res.data?.otp || '');
-        }
-      },
-      error: (err: any) => {
-        this.resendLoading.set(false);
-        this.error.set(err.error?.message || 'Failed to resend OTP.');
-      },
-    });
-  }
-
-  private startCountdown(): void {
-    this.resendCountdown.set(45);
-    this.countdownSub?.unsubscribe();
-    this.countdownSub = interval(1000).subscribe(() => {
-      if (this.resendCountdown() > 0) {
-        this.resendCountdown.set(this.resendCountdown() - 1);
-      } else {
-        this.countdownSub?.unsubscribe();
+        },
+        error: (err: any) => {
+          this.loading.set(false);
+          this.error.set(err.error?.message || 'Something went wrong. Please try again.');
+        },
+      });
+    } catch (err) {
+      this.loading.set(false);
+      const code = (err as { code?: string })?.code;
+      if (code !== 'auth/popup-closed-by-user' && code !== 'auth/cancelled-popup-request') {
+        this.error.set(this.firebaseOtp.friendlyError(err));
       }
-    });
+    }
   }
 }

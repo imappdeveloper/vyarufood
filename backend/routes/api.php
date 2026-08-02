@@ -756,6 +756,7 @@ Route::prefix('v1/customer')->middleware('customer.maintenance')->group(function
     // Guest routes
     Route::post('/register', [$auth, 'register']);
     Route::post('/login', [$auth, 'login']);
+    Route::post('/google-login', [$auth, 'google']);
     Route::post('/send-otp', [$auth, 'sendOtp']);
     Route::post('/register-send-otp', [$auth, 'registerSendOtp']);
     Route::post('/verify-login-otp', [$auth, 'guestVerifyOtp']);

@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Api\V1\Customer;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\CustomerAuth\CustomerLoginRequest;
 use App\Http\Requests\CustomerAuth\CustomerRegisterRequest;
+use App\Http\Requests\CustomerAuth\CustomerGoogleLoginRequest;
 use App\Http\Requests\CustomerAuth\CustomerSendOtpRequest;
 use App\Http\Requests\CustomerAuth\CustomerGuestVerifyOtpRequest;
 use App\Http\Requests\CustomerAuth\CustomerForgotPasswordRequest;
@@ -74,6 +75,24 @@ class CustomerAuthController extends BaseController
         return $this->successResponse(null, 'Logged out successfully');
     }
 
+    public function google(CustomerGoogleLoginRequest $request): JsonResponse
+    {
+        try {
+            $result = $this->authService->googleLogin(
+                idToken: $request->input('id_token'),
+                ip: $request->ip(),
+                userAgent: $request->userAgent(),
+            );
+
+            return $this->successResponse([
+                'customer' => new CustomerResource($result['customer']),
+                'is_new' => $result['is_new'],
+            ], $result['is_new'] ? 'Account created successfully' : 'Login successful');
+        } catch (\App\Exceptions\BusinessException $e) {
+            return $this->errorResponse($e->getMessage(), $e->getCode());
+        }
+    }
+
     public function verifyOtp(CustomerVerifyOtpRequest $request): JsonResponse
     {
         try {
@@ -135,6 +154,7 @@ class CustomerAuthController extends BaseController
                 otp: $request->input('otp'),
                 ip: $request->ip(),
                 userAgent: $request->userAgent(),
+                firebaseToken: $request->input('firebase_token'),
             );
 
             return $this->successResponse([
@@ -153,6 +173,7 @@ class CustomerAuthController extends BaseController
                 otp: $request->input('otp'),
                 ip: $request->ip(),
                 userAgent: $request->userAgent(),
+                firebaseToken: $request->input('firebase_token'),
             );
 
             $customer = $result['customer'];

@@ -6,87 +6,82 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section style="padding: 3.5rem 1rem;" aria-label="Download our app">
-      <div style="max-width: 80rem; margin: 0 auto;">
-        <div style="position: relative; border-radius: 1.5rem; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.12); background: linear-gradient(135deg, #0f172a, #1e293b, #0f172a);">
+    <section class="py-14 sm:py-20 px-4 sm:px-6 lg:px-8" aria-label="Download our app">
+      <div class="max-w-7xl mx-auto">
+        <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
 
           <!-- Decorative background elements -->
-          <div style="position: absolute; inset: 0; pointer-events: none; overflow: hidden;">
-            <div style="position: absolute; top: -6rem; left: -4rem; width: 16rem; height: 16rem; background: radial-gradient(circle, rgba(5,150,105,0.12) 0%, transparent 70%); border-radius: 50%;"></div>
-            <div style="position: absolute; bottom: -4rem; right: -3rem; width: 12rem; height: 12rem; background: radial-gradient(circle, rgba(249,115,22,0.1) 0%, transparent 70%); border-radius: 50%;"></div>
-            <!-- Subtle dot grid pattern -->
-            <div style="position: absolute; inset: 0; opacity: 0.03; background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 24px 24px;"></div>
+          <div class="absolute inset-0 pointer-events-none overflow-hidden">
+            <div class="absolute -top-24 -left-16 w-64 h-64 rounded-full" style="background: radial-gradient(circle, rgba(5,150,105,0.12) 0%, transparent 70%);"></div>
+            <div class="absolute -bottom-16 -right-12 w-48 h-48 rounded-full" style="background: radial-gradient(circle, rgba(249,115,22,0.1) 0%, transparent 70%);"></div>
+            <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 24px 24px;"></div>
           </div>
 
-          <div style="position: relative; z-index: 10; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; padding: 2.5rem;">
+          <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center p-8 sm:p-12">
 
             <!-- Left: Content -->
             <div>
-              <div style="display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0.75rem; background: rgba(249,115,22,0.15); border: 1px solid rgba(249,115,22,0.2); border-radius: 9999px; margin-bottom: 1rem; animation: appSlideIn 0.6s ease-out;">
-                <span class="material-icons" style="font-size: 14px; color: #fb923c;">new_releases</span>
-                <span style="color: #fb923c; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;">Coming Soon</span>
-              </div>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-orange-500/15 border border-orange-500/20 rounded-full text-xs font-bold uppercase tracking-wider text-orange-400 mb-4 animate-[appSlideIn_0.6s_ease-out_both]">
+                <span class="material-icons text-sm">new_releases</span> Coming Soon
+              </span>
 
-              <h2 style="font-size: 1.75rem; font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 0.75rem; animation: appSlideIn 0.6s ease-out 0.1s both;">
-                Get the<br>
-                <span style="background: linear-gradient(135deg, #059669, #16a34a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Vyaru Tiffin</span> App
+              <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight mb-3 animate-[appSlideIn_0.6s_ease-out_0.1s_both]">
+                Get the
+                <span class="bg-gradient-to-r from-emerald-500 to-green-400 bg-clip-text text-transparent">Vyaru Tiffin</span>
+                App
               </h2>
 
-              <p style="color: #94a3b8; font-size: 0.82rem; line-height: 1.6; margin-bottom: 1.5rem; max-width: 24rem; animation: appSlideIn 0.6s ease-out 0.2s both;">
+              <p class="text-slate-400 text-sm sm:text-base leading-relaxed mb-6 max-w-md animate-[appSlideIn_0.6s_ease-out_0.2s_both]">
                 Order meals, manage subscriptions, track deliveries, and more — all from your phone.
               </p>
 
               <!-- Store buttons -->
-              <div style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem; animation: appSlideIn 0.6s ease-out 0.3s both;">
-                <button style="display: inline-flex; align-items: center; gap: 0.625rem; padding: 0.75rem 1.25rem; background: #fff; color: #0f172a; border: none; border-radius: 0.75rem; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.15); transition: all 0.3s ease;"
-                        onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.2)';"
-                        onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 16px rgba(0,0,0,0.15)';">
-                  <span class="material-icons" style="font-size: 1.5rem; color: #22c55e;">android</span>
-                  <div style="text-align: left;">
-                    <p style="font-size: 0.55rem; color: #64748b; margin: 0; line-height: 1;">GET IT ON</p>
-                    <p style="font-size: 0.8rem; font-weight: 700; margin: 0; line-height: 1.3;">Google Play</p>
-                  </div>
+              <div class="flex flex-wrap gap-3 mb-6 animate-[appSlideIn_0.6s_ease-out_0.3s_both]">
+                <button class="inline-flex items-center gap-2.5 px-5 py-3 bg-white text-slate-900 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer">
+                  <span class="material-icons text-2xl text-green-500">android</span>
+                  <span class="text-left">
+                    <span class="block text-[0.55rem] text-slate-500 leading-none">GET IT ON</span>
+                    <span class="block text-sm font-bold leading-tight">Google Play</span>
+                  </span>
                 </button>
-                <button style="display: inline-flex; align-items: center; gap: 0.625rem; padding: 0.75rem 1.25rem; background: #fff; color: #0f172a; border: none; border-radius: 0.75rem; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.15); transition: all 0.3s ease;"
-                        onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.2)';"
-                        onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 16px rgba(0,0,0,0.15)';">
-                  <span class="material-icons" style="font-size: 1.5rem; color: #0f172a;">phone_iphone</span>
-                  <div style="text-align: left;">
-                    <p style="font-size: 0.55rem; color: #64748b; margin: 0; line-height: 1;">Download on the</p>
-                    <p style="font-size: 0.8rem; font-weight: 700; margin: 0; line-height: 1.3;">App Store</p>
-                  </div>
+                <button class="inline-flex items-center gap-2.5 px-5 py-3 bg-white text-slate-900 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer">
+                  <span class="material-icons text-2xl text-slate-900">phone_iphone</span>
+                  <span class="text-left">
+                    <span class="block text-[0.55rem] text-slate-500 leading-none">Download on the</span>
+                    <span class="block text-sm font-bold leading-tight">App Store</span>
+                  </span>
                 </button>
               </div>
 
               <!-- Stats row -->
-              <div style="display: flex; gap: 1.5rem; animation: appSlideIn 0.6s ease-out 0.4s both;">
+              <div class="flex items-center gap-6 animate-[appSlideIn_0.6s_ease-out_0.4s_both]">
                 <div>
-                  <p style="font-size: 1.1rem; font-weight: 800; color: #059669; margin: 0;">4.8</p>
-                  <div style="display: flex; gap: 1px; margin: 0.125rem 0;">
-                    <span class="material-icons" style="font-size: 10px; color: #facc15;">star</span>
-                    <span class="material-icons" style="font-size: 10px; color: #facc15;">star</span>
-                    <span class="material-icons" style="font-size: 10px; color: #facc15;">star</span>
-                    <span class="material-icons" style="font-size: 10px; color: #facc15;">star</span>
-                    <span class="material-icons" style="font-size: 10px; color: #facc15;">star_half</span>
+                  <p class="text-xl font-extrabold text-emerald-500 leading-none">4.8</p>
+                  <div class="flex gap-0.5 my-1.5">
+                    <span class="material-icons text-xs text-yellow-400">star</span>
+                    <span class="material-icons text-xs text-yellow-400">star</span>
+                    <span class="material-icons text-xs text-yellow-400">star</span>
+                    <span class="material-icons text-xs text-yellow-400">star</span>
+                    <span class="material-icons text-xs text-yellow-400">star_half</span>
                   </div>
-                  <p style="font-size: 0.6rem; color: #64748b; margin: 0;">App Rating</p>
+                  <p class="text-xs text-slate-500">App Rating</p>
                 </div>
-                <div style="width: 1px; background: rgba(255,255,255,0.08);"></div>
+                <div class="w-px h-10 bg-white/10"></div>
                 <div>
-                  <p style="font-size: 1.1rem; font-weight: 800; color: #059669; margin: 0;">5K+</p>
-                  <p style="font-size: 0.6rem; color: #64748b; margin: 0;">Downloads</p>
+                  <p class="text-xl font-extrabold text-emerald-500 leading-none">5K+</p>
+                  <p class="text-xs text-slate-500 mt-3">Downloads</p>
                 </div>
-                <div style="width: 1px; background: rgba(255,255,255,0.08);"></div>
+                <div class="w-px h-10 bg-white/10"></div>
                 <div>
-                  <p style="font-size: 1.1rem; font-weight: 800; color: #059669; margin: 0;">24/7</p>
-                  <p style="font-size: 0.6rem; color: #64748b; margin: 0;">Support</p>
+                  <p class="text-xl font-extrabold text-emerald-500 leading-none">24/7</p>
+                  <p class="text-xs text-slate-500 mt-3">Support</p>
                 </div>
               </div>
             </div>
 
             <!-- Right: Phone mockup -->
-            <div style="display: flex; justify-content: center; align-items: center;" class="app-phone-wrap">
-              <div style="position: relative; animation: appSlideRight 0.7s ease-out 0.2s both;">
+            <div class="flex justify-center items-center app-phone-wrap">
+              <div class="relative animate-[appSlideRight_0.7s_ease-out_0.2s_both]">
                 <!-- Phone body -->
                 <div style="width: 13rem; height: 22rem; background: linear-gradient(145deg, #1e293b, #334155); border-radius: 2rem; padding: 0.375rem; box-shadow: 0 20px 50px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);">
                   <div style="width: 100%; height: 100%; background: linear-gradient(160deg, #059669, #16a34a, #22c55e); border-radius: 1.625rem; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center;">
@@ -132,14 +127,14 @@ import { CommonModule } from '@angular/common';
                 </div>
 
                 <!-- Floating badges -->
-                <div style="position: absolute; top: 2rem; -right: 1rem; background: #fff; border-radius: 0.75rem; padding: 0.5rem 0.75rem; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 0.375rem; animation: appBadgeFloat 3s ease-in-out infinite;">
+                <div style="position: absolute; top: 2rem; right: -1rem; background: #fff; border-radius: 0.75rem; padding: 0.5rem 0.75rem; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 0.375rem; animation: appBadgeFloat 3s ease-in-out infinite;">
                   <div style="width: 1.5rem; height: 1.5rem; background: rgba(34,197,94,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
                     <span class="material-icons" style="font-size: 14px; color: #22c55e;">notifications_active</span>
                   </div>
                   <span style="font-size: 0.65rem; font-weight: 700; color: #1e293b; white-space: nowrap;">Order Updates</span>
                 </div>
 
-                <div style="position: absolute; bottom: 4rem; -left: 1rem; background: #fff; border-radius: 0.75rem; padding: 0.5rem 0.75rem; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 0.375rem; animation: appBadgeFloat 3s ease-in-out 1s infinite;">
+                <div style="position: absolute; bottom: 4rem; left: -1rem; background: #fff; border-radius: 0.75rem; padding: 0.5rem 0.75rem; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 0.375rem; animation: appBadgeFloat 3s ease-in-out 1s infinite;">
                   <div style="width: 1.5rem; height: 1.5rem; background: rgba(249,115,22,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
                     <span class="material-icons" style="font-size: 14px; color: #f97316;">local_shipping</span>
                   </div>
@@ -170,10 +165,7 @@ import { CommonModule } from '@angular/common';
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-6px); }
     }
-    @media (max-width: 640px) {
-      .app-phone-wrap { display: none !important; }
-    }
-    @media (min-width: 641px) and (max-width: 1023px) {
+    @media (max-width: 1023px) {
       .app-phone-wrap { display: none !important; }
     }
   `],

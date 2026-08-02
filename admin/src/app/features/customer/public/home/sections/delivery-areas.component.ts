@@ -9,24 +9,24 @@ import { CustomerBrowseApiService, PincodeCheckResponse } from '../../../../../c
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   template: `
-    <section style="background: #f1f5f9; padding: 1.5rem 0;" aria-label="Delivery areas">
-      <div style="max-width: 80rem; margin: 0 auto; padding: 0 1rem;">
-        <div style="background: linear-gradient(135deg, #f97316, #ef4444, #ec4899); border-radius: 1rem; overflow: hidden; box-shadow: 0 16px 48px rgba(249,115,22,0.18);">
-          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; padding: 1.5rem 2rem; color: #fff;">
+    <section class="bg-slate-100 py-10 sm:py-14" aria-label="Delivery areas">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="rounded-3xl bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 overflow-hidden shadow-2xl shadow-orange-500/20">
+          <div class="flex flex-wrap items-center gap-8 px-7 sm:px-10 lg:px-14 py-10 sm:py-12 text-white">
 
             <!-- Left: text + form -->
-            <div style="flex: 1; min-width: 20rem;" class="del-left">
-              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.375rem;">
-                <div style="width: 2rem; height: 2rem; background: rgba(255,255,255,0.15); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; animation: delPulse 2s ease-in-out infinite;">
-                  <span class="material-icons" style="font-size: 18px;">location_on</span>
+            <div class="flex-1 min-w-[20rem]">
+              <div class="flex items-center gap-3 mb-1.5">
+                <div class="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center animate-[delPulse_2s_ease-in-out_infinite]">
+                  <span class="material-icons text-xl">location_on</span>
                 </div>
-                <span style="font-size: 1.125rem; font-weight: 800; animation: delSlideIn 0.5s ease-out;">We Deliver Near You</span>
+                <span class="text-xl sm:text-2xl font-extrabold animate-[delSlideIn_0.5s_ease-out_both]">We Deliver Near You</span>
               </div>
-              <p style="color: rgba(255,255,255,0.85); font-size: 0.78rem; margin-bottom: 1rem; animation: delSlideIn 0.5s ease-out 0.1s both;">Check if we deliver to your area</p>
+              <p class="text-white/85 text-sm sm:text-base mb-5 animate-[delSlideIn_0.5s_ease-out_0.1s_both]">Check if we deliver to your area</p>
 
-              <form (ngSubmit)="checkDelivery()" style="display: flex; gap: 0.5rem; max-width: 30rem; animation: delSlideIn 0.5s ease-out 0.2s both;">
-                <div style="position: relative; flex: 1;">
-                  <span class="material-icons" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 18px;">pin_drop</span>
+              <form (ngSubmit)="checkDelivery()" class="flex gap-2.5 max-w-lg animate-[delSlideIn_0.5s_ease-out_0.2s_both]">
+                <div class="relative flex-1">
+                  <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">pin_drop</span>
                   <input
                     type="text"
                     [(ngModel)]="pincode"
@@ -36,18 +36,14 @@ import { CustomerBrowseApiService, PincodeCheckResponse } from '../../../../../c
                     pattern="[0-9]*"
                     inputmode="numeric"
                     aria-label="Enter pincode"
-                    style="width: 100%; padding: 0.75rem 0.75rem 0.75rem 2.5rem; border-radius: 0.625rem; background: #fff; color: #1e293b; font-size: 0.8125rem; outline: none; font-weight: 500; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: box-shadow 0.3s;"
-                    onfocus="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)';"
-                    onblur="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)';" />
+                    class="w-full py-3 pl-9 pr-3 rounded-xl bg-white text-slate-900 text-sm font-medium outline-none shadow-md focus:shadow-lg transition-shadow duration-300"
+                  />
                 </div>
                 <button type="submit"
                         [disabled]="checking()"
-                        style="padding: 0.75rem 1.25rem; background: #fff; color: #0f172a; font-weight: 600; font-size: 0.8125rem; border-radius: 0.625rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: none; cursor: pointer; white-space: nowrap; transition: all 0.3s; display: flex; align-items: center; justify-content: center;"
-                        onmouseover="this.style.boxShadow='0 6px 18px rgba(0,0,0,0.15)'; this.style.transform='translateY(-1px)';"
-                        onmouseout="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.transform='none';"
-                        [style.opacity]="checking() ? 0.5 : 1">
+                        class="px-5 py-3 bg-white text-slate-900 font-semibold text-sm rounded-xl shadow-md hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0 transition-all duration-300 cursor-pointer inline-flex items-center justify-center whitespace-nowrap">
                   @if (checking()) {
-                    <span class="material-icons" style="font-size: 18px; animation: spin 0.8s linear infinite;">refresh</span>
+                    <span class="material-icons text-lg animate-spin">refresh</span>
                   } @else {
                     Check
                   }
@@ -55,29 +51,32 @@ import { CustomerBrowseApiService, PincodeCheckResponse } from '../../../../../c
               </form>
 
               @if (result()) {
-                <div style="margin-top: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.625rem; backdrop-filter: blur(8px); transition: all 0.4s ease; animation: delResultPop 0.3s ease-out;"
-                     [style.background]="result()!.deliverable ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.1)'"
-                     [style.border]="result()!.deliverable ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(255,255,255,0.1)'">
-                  <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <span class="material-icons" style="font-size: 1.25rem;"
-                          [style.color]="result()!.deliverable ? '#86efac' : '#fca5a5'">
+                <div class="mt-4 p-3.5 rounded-xl backdrop-blur-sm animate-[delResultPop_0.3s_ease-out_both]"
+                     [class.bg-white/15]="result()!.deliverable"
+                     [class.border]="result()!.deliverable"
+                     [class.border-white/20]="result()!.deliverable"
+                     [class.bg-white/10]="!result()!.deliverable">
+                  <div class="flex items-center gap-2.5">
+                    <span class="material-icons text-xl"
+                          [class.text-green-300]="result()!.deliverable"
+                          [class.text-red-300]="!result()!.deliverable">
                       {{ result()!.deliverable ? 'check_circle' : 'cancel' }}
                     </span>
-                    <div style="flex: 1;">
-                      <p style="font-weight: 700; font-size: 0.8rem;">{{ result()!.message }}</p>
+                    <div class="flex-1">
+                      <p class="font-bold text-sm">{{ result()!.message }}</p>
                       @if (result()!.deliverable) {
-                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.25rem; color: rgba(255,255,255,0.8); font-size: 0.68rem;">
+                        <div class="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-white/80 text-xs">
                           @if (result()!.zone_name) {
-                            <span style="display: flex; align-items: center; gap: 0.2rem;">
-                              <span class="material-icons" style="font-size: 10px;">my_location</span>{{ result()!.zone_name }}
+                            <span class="inline-flex items-center gap-1">
+                              <span class="material-icons text-sm">my_location</span>{{ result()!.zone_name }}
                             </span>
                           }
-                          <span style="display: flex; align-items: center; gap: 0.2rem;">
-                            <span class="material-icons" style="font-size: 10px;">schedule</span>{{ result()!.estimated_delivery_time || 30 }} min
+                          <span class="inline-flex items-center gap-1">
+                            <span class="material-icons text-sm">schedule</span>{{ result()!.estimated_delivery_time || 30 }} min
                           </span>
                           @if (result()!.delivery_charge === 0) {
-                            <span style="color: #86efac; font-weight: 700; display: flex; align-items: center; gap: 0.2rem;">
-                              <span class="material-icons" style="font-size: 10px;">local_offer</span>Free delivery!
+                            <span class="text-green-300 font-bold inline-flex items-center gap-1">
+                              <span class="material-icons text-sm">local_offer</span>Free delivery!
                             </span>
                           }
                         </div>
@@ -89,20 +88,18 @@ import { CustomerBrowseApiService, PincodeCheckResponse } from '../../../../../c
             </div>
 
             <!-- Right: visual -->
-            <div style="flex-shrink: 0; display: flex; align-items: center; gap: 0.75rem; animation: delSlideRight 0.6s ease-out 0.2s both;" class="del-right">
-              <div style="position: relative;">
-                <div style="width: 4.5rem; height: 4.5rem; background: rgba(255,255,255,0.12); border-radius: 0.875rem; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.15); animation: delIconBounce 2s ease-in-out infinite;">
-                  <span class="material-icons" style="font-size: 2rem; color: #fff;">delivery_dining</span>
+            <div class="flex-shrink-0 hidden sm:flex items-center gap-4 animate-[delSlideRight_0.6s_ease-out_0.2s_both]">
+              <div class="relative">
+                <div class="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center border border-white/15 animate-[delIconBounce_2s_ease-in-out_infinite]">
+                  <span class="material-icons text-3xl text-white">delivery_dining</span>
                 </div>
               </div>
-              <div style="max-width: 10rem;">
-                <p style="font-weight: 700; font-size: 0.8rem; color: #fff; margin-bottom: 0.125rem;">Fast Delivery</p>
-                <p style="color: rgba(255,255,255,0.8); font-size: 0.68rem; line-height: 1.4; margin-bottom: 0.5rem;">30-45 min to your doorstep</p>
+              <div class="max-w-[10rem]">
+                <p class="font-bold text-sm text-white mb-0.5">Fast Delivery</p>
+                <p class="text-white/80 text-xs leading-relaxed mb-1.5">30-45 min to your doorstep</p>
                 <a routerLink="/delivery-areas"
-                   style="display: inline-flex; align-items: center; gap: 0.25rem; color: #fff; font-weight: 600; font-size: 0.7rem; text-decoration: none; transition: all 0.3s;"
-                   onmouseover="this.style.gap='0.5rem';"
-                   onmouseout="this.style.gap='0.25rem';">
-                  View Areas <span class="material-icons" style="font-size: 14px;">arrow_forward</span>
+                   class="inline-flex items-center gap-1.5 text-white font-semibold text-xs hover:gap-2.5 transition-all duration-300">
+                  View Areas <span class="material-icons text-sm">arrow_forward</span>
                 </a>
               </div>
             </div>
@@ -132,13 +129,6 @@ import { CustomerBrowseApiService, PincodeCheckResponse } from '../../../../../c
     @keyframes delResultPop {
       from { opacity: 0; transform: scale(0.95) translateY(-4px); }
       to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    @media (max-width: 640px) {
-      .del-right { display: none !important; }
     }
   `],
 })

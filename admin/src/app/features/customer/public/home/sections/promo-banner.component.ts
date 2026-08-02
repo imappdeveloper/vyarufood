@@ -7,57 +7,48 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <section style="max-width: 80rem; margin: 0 auto; padding: 1.5rem 1rem;" aria-label="Promotional offer">
-      <div style="position: relative; overflow: hidden; border-radius: 1rem; background: linear-gradient(135deg, #059669, #0d9488, #0891b2); box-shadow: 0 16px 48px rgba(13,148,136,0.18);">
-        <!-- Decorative blurs -->
-        <div style="position: absolute; inset: 0; opacity: 0.08; pointer-events: none;">
-          <div style="position: absolute; top: -3rem; right: -3rem; width: 14rem; height: 14rem; background: #fff; border-radius: 50%; filter: blur(50px);"></div>
-          <div style="position: absolute; bottom: -4rem; left: 20%; width: 12rem; height: 12rem; background: #facc15; border-radius: 50%; filter: blur(50px);"></div>
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10" aria-label="Promotional offer">
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 shadow-2xl shadow-teal-600/20">
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+          <div class="absolute -top-12 -right-12 w-56 h-56 bg-white rounded-full blur-3xl"></div>
+          <div class="absolute -bottom-16 left-1/4 w-48 h-48 bg-yellow-300 rounded-full blur-3xl"></div>
         </div>
 
-        <div style="position: relative; z-index: 10; display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem; padding: 1.5rem 2rem;">
-          <!-- Left: text + buttons -->
-          <div style="flex: 1; min-width: 18rem; color: #fff;">
-            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
-              <span style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.15rem 0.625rem; background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border-radius: 9999px; font-size: 0.65rem; font-weight: 700; border: 1px solid rgba(255,255,255,0.2); animation: promoSlideIn 0.6s ease-out;">
-                <span class="material-icons" style="font-size: 12px; color: #facc15;">local_offer</span> Limited Time
-              </span>
-            </div>
-            <h2 style="font-size: 1.35rem; font-weight: 800; line-height: 1.2; margin-bottom: 0.375rem; animation: promoSlideIn 0.6s ease-out 0.1s both;">
-              Get <span style="color: #facc15;">20% OFF</span> on First Subscription
+        <div class="relative z-10 flex flex-wrap items-center gap-8 px-7 sm:px-10 lg:px-14 py-10 sm:py-12 text-white">
+          <div class="flex-1 min-w-[18rem]">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-white/15 backdrop-blur-sm border border-white/25 rounded-full text-xs font-bold mb-4 animate-[promoSlideIn_0.6s_ease-out_both]">
+              <span class="material-icons text-sm text-yellow-300">local_offer</span> Limited Time Offer
+            </span>
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-tight mb-2 animate-[promoSlideIn_0.6s_ease-out_0.1s_both]">
+              Get <span class="text-yellow-300">20% OFF</span> on First Subscription
             </h2>
-            <p style="color: rgba(255,255,255,0.85); font-size: 0.8rem; line-height: 1.5; margin-bottom: 1rem; animation: promoSlideIn 0.6s ease-out 0.2s both;">
+            <p class="text-white/85 text-sm sm:text-base leading-relaxed mb-6 max-w-lg animate-[promoSlideIn_0.6s_ease-out_0.2s_both]">
               Fresh homestyle meals delivered to your doorstep with zero delivery charges.
             </p>
-            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; animation: promoSlideIn 0.6s ease-out 0.3s both;">
+            <div class="flex flex-wrap gap-3 animate-[promoSlideIn_0.6s_ease-out_0.3s_both]">
               <a routerLink="/subscriptions"
-                 style="display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.625rem 1.25rem; background: #fff; color: #0f172a; font-weight: 600; font-size: 0.8rem; border-radius: 0.625rem; text-decoration: none; box-shadow: 0 4px 16px rgba(0,0,0,0.12); transition: all 0.3s ease;"
-                 onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.18)';"
-                 onmouseout="this.style.transform='none'; this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)';">
-                <span class="material-icons" style="font-size: 18px;">card_membership</span> View Plans
+                 class="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-slate-900 font-semibold text-sm rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
+                <span class="material-icons text-lg">card_membership</span> View Plans
               </a>
               <a routerLink="/meals"
-                 style="display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.625rem 1.25rem; border: 1.5px solid rgba(255,255,255,0.3); color: #fff; font-weight: 600; font-size: 0.8rem; border-radius: 0.625rem; text-decoration: none; transition: all 0.3s ease;"
-                 onmouseover="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.5)';"
-                 onmouseout="this.style.background='transparent'; this.style.borderColor='rgba(255,255,255,0.3)';">
-                <span class="material-icons" style="font-size: 18px;">restaurant_menu</span> Browse
+                 class="inline-flex items-center gap-2 px-5 py-2.5 border-2 border-white/40 text-white font-semibold text-sm rounded-xl hover:bg-white/10 hover:border-white/60 transition-all duration-300">
+                <span class="material-icons text-lg">restaurant_menu</span> Browse Meals
               </a>
             </div>
           </div>
 
-          <!-- Right: visual -->
-          <div style="flex-shrink: 0; display: flex; align-items: center; gap: 1rem; animation: promoSlideRight 0.7s ease-out 0.2s both;">
-            <div style="position: relative;">
-              <div style="width: 7rem; height: 7rem; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.15); animation: float 3s ease-in-out infinite;">
-                <span style="font-size: 3rem;">&#127859;</span>
+          <div class="flex-shrink-0 hidden sm:flex items-center animate-[promoSlideRight_0.7s_ease-out_0.2s_both]">
+            <div class="relative">
+              <div class="w-28 h-28 bg-white/10 rounded-full flex items-center justify-center border border-white/15 animate-[float_3s_ease-in-out_infinite]">
+                <span class="text-5xl">&#127859;</span>
               </div>
-              <div style="position: absolute; top: -0.375rem; right: -0.5rem; background: #facc15; color: #1e293b; border-radius: 0.5rem; padding: 0.25rem 0.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.2); animation: promoPop 0.5s ease-out 0.5s both;">
-                <p style="font-size: 0.55rem; font-weight: 700; margin: 0; line-height: 1;">CODE</p>
-                <p style="font-size: 0.8rem; font-weight: 800; letter-spacing: 0.05em; margin: 0; line-height: 1.2;">FIRST20</p>
+              <div class="absolute -top-1.5 -right-2 bg-yellow-400 text-slate-900 rounded-lg px-2 py-1 shadow-lg animate-[promoPop_0.5s_ease-out_0.5s_both]">
+                <p class="text-[0.55rem] font-bold leading-none">CODE</p>
+                <p class="text-xs font-extrabold tracking-wide leading-tight">FIRST20</p>
               </div>
-              <div style="position: absolute; bottom: -0.25rem; left: -0.75rem; background: #fff; border-radius: 0.5rem; padding: 0.25rem 0.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.12); display: flex; align-items: center; gap: 0.25rem; animation: promoPop 0.5s ease-out 0.6s both;">
-                <span class="material-icons" style="color: #22c55e; font-size: 14px;">check_circle</span>
-                <span style="font-size: 0.65rem; font-weight: 700; color: #334155;">Free</span>
+              <div class="absolute -bottom-1 -left-3 bg-white rounded-lg px-2 py-1 shadow-lg flex items-center gap-1 animate-[promoPop_0.5s_ease-out_0.6s_both]">
+                <span class="material-icons text-green-500 text-sm">check_circle</span>
+                <span class="text-xs font-bold text-slate-700">Free Delivery</span>
               </div>
             </div>
           </div>
@@ -77,6 +68,10 @@ import { RouterModule } from '@angular/router';
     @keyframes promoPop {
       from { opacity: 0; transform: scale(0.5); }
       to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
   `],
 })

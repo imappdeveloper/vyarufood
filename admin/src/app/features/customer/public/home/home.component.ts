@@ -10,7 +10,6 @@ import { HealthySectionComponent } from './sections/healthy-section.component';
 import { PlansSectionComponent } from './sections/plans-section.component';
 import { HowItWorksComponent } from './sections/how-it-works.component';
 import { WhyChooseUsComponent } from './sections/why-choose-us.component';
-import { AppDownloadComponent } from './sections/app-download.component';
 import { CookingAnimationComponent } from './sections/cooking-animation.component';
 import { PincodeBannerComponent } from '../../shared/components/pincode-banner/pincode-banner.component';
 
@@ -29,7 +28,6 @@ import { PincodeBannerComponent } from '../../shared/components/pincode-banner/p
     PlansSectionComponent,
     HowItWorksComponent,
     WhyChooseUsComponent,
-    AppDownloadComponent,
     CookingAnimationComponent,
     PincodeBannerComponent,
   ],
@@ -111,7 +109,6 @@ import { PincodeBannerComponent } from '../../shared/components/pincode-banner/p
       <div class="anim-section anim-scale" #animSection><app-plans-section /></div>
       <div class="anim-section anim-left" #animSection><app-how-it-works /></div>
       <div class="anim-section" #animSection><app-why-choose-us /></div>
-      <div class="anim-section anim-scale" #animSection><app-app-download /></div>
     </div>
   `,
 })

@@ -9,4 +9,12 @@ export const environment = {
   defaultPerPage: 15,
   maxFileSize: 10240,
   allowedImageTypes: ['image/jpeg', 'image/png', 'image/webp'],
+  firebase: {
+    apiKey: 'AIzaSyAdCqradIq_pTaIQVGQYOt2NJtEdELV8aM',
+    authDomain: 'ansh-8693f.firebaseapp.com',
+    projectId: 'ansh-8693f',
+    storageBucket: 'ansh-8693f.firebasestorage.app',
+    messagingSenderId: '281792512796',
+    appId: '1:281792512796:web:ee293af6f2c609c21470d9',
+  },
 };

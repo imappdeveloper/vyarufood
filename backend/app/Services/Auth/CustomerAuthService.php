@@ -17,6 +17,10 @@ class CustomerAuthService extends BaseService implements CustomerAuthServiceInte
 {
     protected string $moduleName = 'customer_auth';
 
+    public function __construct(
+        protected FirebasePhoneVerifier $firebasePhoneVerifier,
+    ) {}
+
     public function register(array $data, string $ip, ?string $userAgent): array
     {
         $existingCustomer = Customer::where('email', $data['email'])->orWhere('phone', $data['phone'])->first();
@@ -136,6 +140,15 @@ class CustomerAuthService extends BaseService implements CustomerAuthServiceInte
         $customer = Customer::where('phone', $phone)->first();
 
         if (! $customer) {
+            // Reuse a soft-deleted account so the unique phone/email keys don't collide.
+            $customer = Customer::withTrashed()->where('phone', $phone)->first();
+
+            if ($customer) {
+                $customer->restore();
+            }
+        }
+
+        if (! $customer) {
             $customer = Customer::create([
                 'phone' => $phone,
                 'country_code' => '+91',
@@ -153,7 +166,7 @@ class CustomerAuthService extends BaseService implements CustomerAuthServiceInte
         return $otp;
     }
 
-    public function verifyOtpLogin(string $phone, string $otp, string $ip, ?string $userAgent): array
+    public function verifyOtpLogin(string $phone, string $otp, string $ip, ?string $userAgent, ?string $firebaseToken = null): array
     {
         $customer = Customer::where('phone', $phone)->first();
 
@@ -169,8 +182,21 @@ class CustomerAuthService extends BaseService implements CustomerAuthServiceInte
             throw new BusinessException('Your account is not active. Please contact support.', 403);
         }
 
-        if (! $customer->verifyOtp($otp)) {
+        $firebaseVerified = false;
+        if ($firebaseToken) {
+            $firebaseVerified = $this->firebasePhoneVerifier->verify($firebaseToken, $phone);
+        }
+
+        if (! $firebaseVerified && ! $customer->verifyOtp($otp)) {
             throw new BusinessException('Invalid or expired OTP.', 422);
+        }
+
+        if ($firebaseVerified) {
+            $customer->update([
+                'phone_verified' => true,
+                'otp_code' => null,
+                'otp_expires_at' => null,
+            ]);
         }
 
         Auth::guard('customer')->login($customer);
@@ -181,6 +207,67 @@ class CustomerAuthService extends BaseService implements CustomerAuthServiceInte
 
         return [
             'customer' => $customer,
+        ];
+    }
+
+    public function googleLogin(string $idToken, string $ip, ?string $userAgent): array
+    {
+        $firebaseUser = $this->firebasePhoneVerifier->lookup($idToken);
+
+        if (! $firebaseUser || empty($firebaseUser['email'])) {
+            throw new BusinessException('Unable to verify your Google sign-in. Please try again.', 422);
+        }
+
+        $email = strtolower((string) $firebaseUser['email']);
+
+        $customer = Customer::where('email', $email)->first();
+
+        if (! $customer) {
+            $customer = Customer::withTrashed()->where('email', $email)->first();
+
+            if ($customer) {
+                $customer->restore();
+            }
+        }
+
+        $isNew = false;
+
+        if (! $customer) {
+            $isNew = true;
+
+            $displayName = $firebaseUser['displayName'] ?? '';
+            $nameParts = $displayName ? array_values(array_filter(explode(' ', $displayName))) : [];
+
+            $customer = Customer::create([
+                'first_name' => $nameParts[0] ?? '',
+                'last_name' => $nameParts[1] ?? '',
+                'email' => $email,
+                'phone' => $firebaseUser['phoneNumber'] ?? '',
+                'country_code' => '+91',
+                'password' => \Illuminate\Support\Str::random(32),
+                'email_verified' => true,
+                'profile_photo' => $firebaseUser['photoUrl'] ?? null,
+                'referral_code' => strtoupper(Str::random(8)),
+            ])->refresh();
+        }
+
+        if ($customer->isBlocked()) {
+            throw new BusinessException('Your account has been blocked. Please contact support.', 403);
+        }
+
+        if (! $customer->isActive()) {
+            throw new BusinessException('Your account is not active. Please contact support.', 403);
+        }
+
+        Auth::guard('customer')->login($customer);
+
+        $customer->recordLogin($ip, null, $userAgent);
+
+        $this->logInfo('Customer logged in via Google', ['customer_id' => $customer->id, 'is_new' => $isNew]);
+
+        return [
+            'customer' => $customer,
+            'is_new' => $isNew,
         ];
     }
 

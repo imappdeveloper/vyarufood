@@ -15,7 +15,8 @@ interface CustomerAuthServiceInterface
     public function resendOtp(Customer $customer): string;
     public function sendOtp(string $phone): string;
     public function registerSendOtp(string $phone): string;
-    public function verifyOtpLogin(string $phone, string $otp, string $ip, ?string $userAgent): array;
+    public function verifyOtpLogin(string $phone, string $otp, string $ip, ?string $userAgent, ?string $firebaseToken = null): array;
+    public function googleLogin(string $idToken, string $ip, ?string $userAgent): array;
     public function forgotPassword(string $email): void;
     public function resetPassword(string $token, string $email, string $password): void;
     public function getProfile(Customer $customer): Customer;
