@@ -32,7 +32,7 @@ import { PaginationMeta } from '../../../../core/interfaces/api-response.interfa
     CustomerPaginationComponent,
   ],
   template: `
-    <div style="max-width: 56rem; margin: 0 auto; padding: 1.5rem 0;">
+    <div class="orders-page" style="max-width: 56rem; margin: 0 auto; padding: 1.5rem 0;">
 
       <!-- Hero Banner -->
       <div class="orders-hero" style="background: linear-gradient(135deg, #059669, #10b981, #34d399); border-radius: 1rem; padding: 1.5rem 1.75rem; margin-bottom: 1.5rem; position: relative; overflow: hidden;">
@@ -255,7 +255,8 @@ import { PaginationMeta } from '../../../../core/interfaces/api-response.interfa
   `,
   styles: [`
     @media (max-width: 1023px) {
-      .orders-hero { padding: 0.75rem 0.75rem !important; }
+      .orders-page { padding: 0.75rem 0 1.5rem !important; }
+      .orders-hero { border-radius: 0 !important; padding: 0.875rem 1rem !important; }
     }
     @keyframes pulse {
       0%, 100% { opacity: 1; }

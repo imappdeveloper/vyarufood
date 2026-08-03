@@ -50,7 +50,7 @@ const TABS: TabDef[] = [
   template: `
     <div style="max-width: 1200px; margin: 0 auto; padding: 1.5rem 0;">
       <!-- Hero Header -->
-      <div style="background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%); border-radius: 20px; padding: 32px; margin-bottom: 28px; position: relative; overflow: hidden;">
+      <div class="subscriptions-hero" style="background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%); border-radius: 20px; padding: 32px; margin-bottom: 28px; position: relative; overflow: hidden;">
         <div style="position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.08);"></div>
         <div style="position: absolute; bottom: -60px; left: 30%; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.05);"></div>
         <div style="position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
@@ -201,6 +201,9 @@ const TABS: TabDef[] = [
     </div>
   `,
   styles: [`
+    @media (max-width: 1023px) {
+      .subscriptions-hero { display: none !important; }
+    }
     @media (max-width: 768px) {
       :host > div > div:nth-child(2) { overflow-x: auto !important; }
     }

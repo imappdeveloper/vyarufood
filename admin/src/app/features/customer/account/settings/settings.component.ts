@@ -14,7 +14,7 @@ import { environment } from '../../../../../environments/environment';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div style="max-width: 700px; margin: 0 auto; padding: 1.5rem 0;">
+    <div class="settings-page" style="max-width: 700px; margin: 0 auto; padding: 1.5rem 0;">
       <!-- Toast -->
       @if (toast) {
         <div style="position: fixed; top: 24px; right: 24px; z-index: 50; animation: slideIn 0.3s ease-out;">
@@ -380,6 +380,7 @@ import { environment } from '../../../../../environments/environment';
   `,
   styles: [`
     @media (max-width: 1023px) {
+      .settings-page { padding: 0.75rem 1rem 1.5rem !important; }
       .settings-hero { display: none !important; }
     }
     @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }

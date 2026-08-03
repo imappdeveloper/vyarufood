@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CustomerHeaderComponent } from '../../../features/customer/public/components/header/header.component';
 import { MaintenanceComponent } from '../../../features/customer/public/maintenance/maintenance.component';
@@ -54,9 +54,24 @@ import { PincodeStateService } from '../../../core/services/pincode-state.servic
 
       <app-mobile-bottom-nav />
     }
+
+    @if (isOffline()) {
+      <div style="position: fixed; inset: 0; z-index: 9999; background: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 32px; text-align: center;">
+        <div style="width: 96px; height: 96px; border-radius: 50%; background: #f0fdf4; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(5,150,105,0.15);">
+          <span class="material-icons" style="font-size: 48px; color: #059669;">wifi_off</span>
+        </div>
+        <h2 style="font-size: 22px; font-weight: 800; color: #1e293b; margin: 0;">No Internet Connection</h2>
+        <p style="font-size: 14px; color: #64748b; margin: 0; max-width: 280px; line-height: 1.5;">Please check your internet connection and try again.</p>
+        <button (click)="retryConnection()"
+          style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; background: #059669; color: #fff; font-weight: 600; font-size: 14px; border-radius: 12px; border: none; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(5,150,105,0.25);"
+          onmouseover="this.style.background='#047857'" onmouseout="this.style.background='#059669'">
+          <span class="material-icons" style="font-size: 18px;">refresh</span> Try Again
+        </button>
+      </div>
+    }
   `,
 })
-export class PublicLayoutComponent implements OnInit {
+export class PublicLayoutComponent implements OnInit, OnDestroy {
   private publicApi = inject(PublicApiService);
   holidayStatus = inject(HolidayStatusService);
   pincodeState = inject(PincodeStateService);
@@ -64,7 +79,13 @@ export class PublicLayoutComponent implements OnInit {
   maintenanceMode = false;
   maintenanceChecked = false;
 
+  isOffline = signal(typeof navigator !== 'undefined' && !navigator.onLine);
+  private offlineHandler = () => this.isOffline.set(true);
+  private onlineHandler = () => this.isOffline.set(false);
+
   ngOnInit(): void {
+    window.addEventListener('offline', this.offlineHandler);
+    window.addEventListener('online', this.onlineHandler);
     this.holidayStatus.loadStatus();
     this.pincodeState.autoDetectPincode();
     this.publicApi.getMaintenanceStatus().subscribe({
@@ -77,5 +98,18 @@ export class PublicLayoutComponent implements OnInit {
         this.maintenanceChecked = true;
       },
     });
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('offline', this.offlineHandler);
+    window.removeEventListener('online', this.onlineHandler);
+  }
+
+  retryConnection(): void {
+    if (navigator.onLine) {
+      this.isOffline.set(false);
+    } else {
+      window.location.reload();
+    }
   }
 }
