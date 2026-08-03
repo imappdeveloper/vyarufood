@@ -156,33 +156,16 @@ export class RegisterComponent implements OnInit {
     this.loading.set(true);
     this.error.set('');
 
+    const bridge = (window as any).AndroidNative;
+    if (bridge?.requestGoogleSignIn) {
+      await this.loginWithNativeBridge();
+      this.loading.set(false);
+      return;
+    }
+
     try {
       const result = await this.firebaseOtp.signInWithGoogle();
-
-      this.authService.googleLogin(result.idToken).subscribe({
-        next: (res) => {
-          this.loading.set(false);
-          if (res.success && res.data) {
-            if (res.data.is_new) {
-              const profile = {
-                name: result.name,
-                email: result.email,
-                photo: result.photo,
-              };
-              this.authService.setPendingGoogleProfile(profile);
-              this.applyGoogleProfile(profile);
-              this.step.set('profile');
-            } else {
-              this.authService.setPendingGoogleProfile(null);
-              this.router.navigate(['/']);
-            }
-          }
-        },
-        error: (err: any) => {
-          this.loading.set(false);
-          this.error.set(err.error?.message || 'Something went wrong. Please try again.');
-        },
-      });
+      this.completeGoogleLogin(result);
     } catch (err) {
       this.loading.set(false);
       const code = (err as { code?: string })?.code;
@@ -190,6 +173,63 @@ export class RegisterComponent implements OnInit {
         this.error.set(this.firebaseOtp.friendlyError(err));
       }
     }
+  }
+
+  private loginWithNativeBridge(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const cleanup = () => {
+        delete (window as any).__onNativeGoogleToken;
+        delete (window as any).__onNativeGoogleError;
+      };
+
+      (window as any).__onNativeGoogleToken = async (idToken: string) => {
+        cleanup();
+        try {
+          const result = await this.firebaseOtp.signInWithGoogleToken(idToken);
+          this.completeGoogleLogin(result);
+        } catch (err) {
+          this.error.set(this.firebaseOtp.friendlyError(err));
+        }
+        resolve();
+      };
+
+      (window as any).__onNativeGoogleError = (msg: string) => {
+        cleanup();
+        if (msg !== 'cancelled') {
+          this.error.set('Google sign-in could not be completed. Please try again.');
+        }
+        resolve();
+      };
+
+      (window as any).AndroidNative.requestGoogleSignIn();
+    });
+  }
+
+  private completeGoogleLogin(result: { idToken: string; name: string; email: string; photo: string | null }): void {
+    this.authService.googleLogin(result.idToken).subscribe({
+      next: (res) => {
+        this.loading.set(false);
+        if (res.success && res.data) {
+          if (res.data.is_new) {
+            const profile = {
+              name: result.name,
+              email: result.email,
+              photo: result.photo,
+            };
+            this.authService.setPendingGoogleProfile(profile);
+            this.applyGoogleProfile(profile);
+            this.step.set('profile');
+          } else {
+            this.authService.setPendingGoogleProfile(null);
+            this.router.navigate(['/']);
+          }
+        }
+      },
+      error: (err: any) => {
+        this.loading.set(false);
+        this.error.set(err.error?.message || 'Something went wrong. Please try again.');
+      },
+    });
   }
 
   onCompleteProfile(): void {

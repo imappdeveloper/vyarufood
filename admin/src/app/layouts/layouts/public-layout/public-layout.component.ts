@@ -1,7 +1,5 @@
-import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
-import { Router, RouterOutlet, NavigationStart, NavigationEnd, NavigationCancel, NavigationError, Event } from '@angular/router';
-import { filter } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { Component, inject, OnInit } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { CustomerHeaderComponent } from '../../../features/customer/public/components/header/header.component';
 import { MaintenanceComponent } from '../../../features/customer/public/maintenance/maintenance.component';
 import { ClosedForHolidayComponent } from '../../../features/customer/public/closed/closed-for-holiday.component';
@@ -11,7 +9,6 @@ import { MobileBottomNavComponent } from '../../../features/customer/shared/comp
 import { PublicApiService } from '../../../core/services/public-api.service';
 import { HolidayStatusService } from '../../../core/services/holiday-status.service';
 import { PincodeStateService } from '../../../core/services/pincode-state.service';
-import { LoadingService } from '../../../core/services/loading.service';
 
 @Component({
   selector: 'app-public-layout',
@@ -56,26 +53,16 @@ import { LoadingService } from '../../../core/services/loading.service';
       </div>
 
       <app-mobile-bottom-nav />
-
-      @if (navLoading()) {
-        <app-public-loading message="Loading…" />
-      }
     }
   `,
 })
-export class PublicLayoutComponent implements OnInit, OnDestroy {
+export class PublicLayoutComponent implements OnInit {
   private publicApi = inject(PublicApiService);
-  private router = inject(Router);
-  private loading = inject(LoadingService);
   holidayStatus = inject(HolidayStatusService);
   pincodeState = inject(PincodeStateService);
 
   maintenanceMode = false;
   maintenanceChecked = false;
-
-  navLoading = signal(false);
-  private routerSub?: Subscription;
-  private navCheckTimer?: ReturnType<typeof setTimeout>;
 
   ngOnInit(): void {
     this.holidayStatus.loadStatus();
@@ -90,31 +77,5 @@ export class PublicLayoutComponent implements OnInit, OnDestroy {
         this.maintenanceChecked = true;
       },
     });
-
-    this.routerSub = this.router.events
-      .pipe(filter((e): e is NavigationStart => e instanceof NavigationStart))
-      .subscribe(() => {
-        this.navLoading.set(true);
-        clearTimeout(this.navCheckTimer);
-      });
-
-    this.router.events
-      .pipe(filter((e: Event) => e instanceof NavigationEnd || e instanceof NavigationCancel || e instanceof NavigationError))
-      .subscribe(() => {
-        const started = Date.now();
-        const check = () => {
-          if (!this.loading.isLoading || Date.now() - started > 8000) {
-            this.navLoading.set(false);
-          } else {
-            this.navCheckTimer = setTimeout(check, 250);
-          }
-        };
-        check();
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.routerSub?.unsubscribe();
-    clearTimeout(this.navCheckTimer);
   }
 }

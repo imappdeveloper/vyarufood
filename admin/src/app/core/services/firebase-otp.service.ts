@@ -3,6 +3,7 @@ import { initializeApp, type FirebaseApp } from 'firebase/app';
 import {
   getAuth,
   signInWithPhoneNumber,
+  signInWithCredential,
   RecaptchaVerifier,
   GoogleAuthProvider,
   signInWithPopup,
@@ -75,6 +76,21 @@ export class FirebaseOtpService {
     return {
       idToken,
       name: credential.user.displayName ?? (additional?.profile?.['name'] as string | undefined) ?? '',
+      email: credential.user.email ?? '',
+      photo: credential.user.photoURL ?? null,
+    };
+  }
+
+  async signInWithGoogleToken(googleIdToken: string): Promise<GoogleSignInResult> {
+    if (!this.enabled) {
+      throw new Error('Firebase is not configured.');
+    }
+    const auth = this.ensureAuth();
+    const credential = await signInWithCredential(auth, GoogleAuthProvider.credential(googleIdToken));
+    const idToken = await credential.user.getIdToken();
+    return {
+      idToken,
+      name: credential.user.displayName ?? '',
       email: credential.user.email ?? '',
       photo: credential.user.photoURL ?? null,
     };

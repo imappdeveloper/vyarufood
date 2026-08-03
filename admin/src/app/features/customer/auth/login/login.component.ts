@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { CustomerAuthService } from '../../../../core/services/customer-auth.service';
-import { FirebaseOtpService } from '../../../../core/services/firebase-otp.service';
+import { FirebaseOtpService, GoogleSignInResult } from '../../../../core/services/firebase-otp.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 
 @Component({
@@ -72,36 +72,16 @@ export class LoginComponent {
     this.loading.set(true);
     this.error.set('');
 
+    const bridge = (window as any).AndroidNative;
+    if (bridge?.requestGoogleSignIn) {
+      await this.loginWithNativeBridge();
+      this.loading.set(false);
+      return;
+    }
+
     try {
       const result = await this.firebaseOtp.signInWithGoogle();
-
-      this.authService.googleLogin(result.idToken).subscribe({
-        next: (res) => {
-          this.loading.set(false);
-          if (res.success && res.data) {
-            if (res.data.is_new) {
-              this.authService.setPendingGoogleProfile({
-                name: result.name,
-                email: result.email,
-                photo: result.photo,
-              });
-              this.router.navigate(['/register']);
-            } else {
-              this.notification.success('Login successful');
-              const returnUrl = this.route.snapshot.queryParams['returnUrl'];
-              if (returnUrl && returnUrl.startsWith('/') && !returnUrl.startsWith('/login')) {
-                this.router.navigateByUrl(returnUrl);
-              } else {
-                this.router.navigate(['/']);
-              }
-            }
-          }
-        },
-        error: (err: any) => {
-          this.loading.set(false);
-          this.error.set(err.error?.message || 'Something went wrong. Please try again.');
-        },
-      });
+      this.completeGoogleLogin(result);
     } catch (err) {
       this.loading.set(false);
       const code = (err as { code?: string })?.code;
@@ -109,5 +89,65 @@ export class LoginComponent {
         this.error.set(this.firebaseOtp.friendlyError(err));
       }
     }
+  }
+
+  private loginWithNativeBridge(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const cleanup = () => {
+        delete (window as any).__onNativeGoogleToken;
+        delete (window as any).__onNativeGoogleError;
+      };
+
+      (window as any).__onNativeGoogleToken = async (idToken: string) => {
+        cleanup();
+        try {
+          const result = await this.firebaseOtp.signInWithGoogleToken(idToken);
+          this.completeGoogleLogin(result);
+        } catch (err) {
+          this.error.set(this.firebaseOtp.friendlyError(err));
+        }
+        resolve();
+      };
+
+      (window as any).__onNativeGoogleError = (msg: string) => {
+        cleanup();
+        if (msg !== 'cancelled') {
+          this.error.set('Google sign-in could not be completed. Please try again.');
+        }
+        resolve();
+      };
+
+      (window as any).AndroidNative.requestGoogleSignIn();
+    });
+  }
+
+  private completeGoogleLogin(result: GoogleSignInResult): void {
+    this.authService.googleLogin(result.idToken).subscribe({
+      next: (res) => {
+        this.loading.set(false);
+        if (res.success && res.data) {
+          if (res.data.is_new) {
+            this.authService.setPendingGoogleProfile({
+              name: result.name,
+              email: result.email,
+              photo: result.photo,
+            });
+            this.router.navigate(['/register']);
+          } else {
+            this.notification.success('Login successful');
+            const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+            if (returnUrl && returnUrl.startsWith('/') && !returnUrl.startsWith('/login')) {
+              this.router.navigateByUrl(returnUrl);
+            } else {
+              this.router.navigate(['/']);
+            }
+          }
+        }
+      },
+      error: (err: any) => {
+        this.loading.set(false);
+        this.error.set(err.error?.message || 'Something went wrong. Please try again.');
+      },
+    });
   }
 }
