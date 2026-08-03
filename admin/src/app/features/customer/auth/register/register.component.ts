@@ -16,7 +16,7 @@ import { FirebaseOtpService } from '../../../../core/services/firebase-otp.servi
         <div class="text-center mb-8">
           <a routerLink="/" class="inline-flex items-center gap-2 mb-6">
             <span class="material-icons text-emerald-600 text-3xl">restaurant_menu</span>
-            <span class="text-2xl font-bold text-gray-900">Vyaru Tiffin</span>
+            <span class="text-2xl font-bold text-gray-900">VyaruFood &amp; Tiffin Service</span>
           </a>
           @if (step() === 'google') {
             <h1 class="text-2xl font-bold text-gray-900">Create Account</h1>

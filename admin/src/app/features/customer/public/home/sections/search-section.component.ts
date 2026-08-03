@@ -8,9 +8,9 @@ import { RouterModule, Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   template: `
-    <section class="relative z-20 -mt-1" aria-label="Search meals">
+    <section class="relative z-20 -mt-1 hidden lg:block" aria-label="Search meals">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div style="background: #fff; border-radius: 1rem; box-shadow: 0 8px 30px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #e5e7eb; padding: 1rem 1.25rem; position: relative; margin-top: -1.5rem;" class="sm:-mt-8">
+        <div style="background: #fff; border-radius: 1rem; box-shadow: 0 8px 30px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #e5e7eb; padding: 1rem 1.25rem; position: relative;" class="mt-3 sm:-mt-10">
           <form (ngSubmit)="onSearch()" class="flex flex-col sm:flex-row gap-3">
             <div class="relative flex-1">
               <span class="material-icons absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" style="font-size: 22px;">search</span>

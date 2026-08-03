@@ -9,14 +9,14 @@ import { MealCategory } from '../../../../../core/models/meal/meal-category.mode
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <section class="bg-slate-100 py-14 sm:py-20" aria-label="Meal categories">
+    <section class="bg-slate-100 py-8 sm:py-20" aria-label="Meal categories">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-10 sm:mb-14">
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/15 text-emerald-700 text-xs font-bold rounded-full mb-3 uppercase tracking-wider">
+        <div class="text-center mb-6 sm:mb-14">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/15 text-emerald-700 text-xs font-bold rounded-full mb-2 uppercase tracking-wider">
             <span class="material-icons text-sm">category</span> Categories
           </span>
-          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-3">Explore Meal Categories</h2>
-          <p class="text-slate-600 max-w-lg mx-auto text-sm sm:text-base">Find the perfect meal for every occasion</p>
+          <h2 class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-1">Explore Meal Categories</h2>
+          <p class="text-slate-600 max-w-lg mx-auto text-xs sm:text-base">Find the perfect meal for every occasion</p>
         </div>
 
         @if (loading()) {

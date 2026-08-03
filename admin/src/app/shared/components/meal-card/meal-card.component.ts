@@ -167,6 +167,7 @@ import { Meal } from '../../../core/models/meal/meal.model';
     </div>
   `,
   styles: [`
+    :host { display: block; min-width: 0; }
     @media (max-width: 639.98px) {
       .meal-card-root {
         display: flex !important;
@@ -175,6 +176,8 @@ import { Meal } from '../../../core/models/meal/meal.model';
         gap: 12px;
         padding: 10px !important;
         border-radius: 18px !important;
+        min-width: 0;
+        overflow: hidden;
       }
       .meal-card-image {
         width: 96px !important;

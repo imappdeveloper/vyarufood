@@ -256,7 +256,7 @@ import { MealFilterSidebarComponent, MealFilters } from './meal-filter-sidebar.c
         <div style="flex: 1; min-width: 0;">
           @if (loading()) {
             <!-- Loading skeleton -->
-            <div style="display: grid; grid-template-columns: repeat(1, 1fr); gap: 1.25rem;" class="meals-grid">
+            <div style="display: grid; grid-template-columns: repeat(1, minmax(0, 1fr)); gap: 1.25rem;" class="meals-grid">
               @for (i of [1,2,3,4,5,6]; track i) {
                 <div style="background: #fff; border-radius: 1rem; overflow: hidden; border: 1px solid #f1f5f9; animation: skeletonPulse 1.5s ease-in-out infinite;" [style.animation-delay]="(i * 0.1) + 's'">
                   <div style="height: 12rem; background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite;"></div>
@@ -311,7 +311,7 @@ import { MealFilterSidebarComponent, MealFilters } from './meal-filter-sidebar.c
           } @else {
             <!-- Grid View -->
             @if (viewMode() === 'grid') {
-              <div style="display: grid; grid-template-columns: repeat(1, 1fr); gap: 1.25rem;" class="meals-grid" #mealGrid>
+              <div style="display: grid; grid-template-columns: repeat(1, minmax(0, 1fr)); gap: 1.25rem;" class="meals-grid" #mealGrid>
                 @for (meal of meals(); track meal.id; let i = $index) {
                   <div class="meals-card-anim" [style.animation-delay]="(i * 0.06) + 's'">
                     <app-meal-card
@@ -449,8 +449,8 @@ import { MealFilterSidebarComponent, MealFilters } from './meal-filter-sidebar.c
       .meals-sort-label { display: inline !important; }
     }
     @media (max-width: 1023.98px) {
-      /* Compact app-style hero */
-      .meals-hero { padding: 2.25rem 1rem 2.25rem !important; }
+      /* Compact app-style hero: hidden on mobile */
+      .meals-hero { display: none !important; }
       .meals-hero > *:not(.meals-hero-content) { display: none !important; }
       .meals-breadcrumb { display: none !important; }
       .meals-hero-icon { font-size: 1.5rem !important; }
@@ -480,14 +480,14 @@ import { MealFilterSidebarComponent, MealFilters } from './meal-filter-sidebar.c
         font-size: 0.75rem !important;
       }
 
-      /* Tighter app list spacing */
-      .meals-grid { gap: 0.75rem !important; }
+      /* Tighter app list spacing; allow cells to shrink below card min-content */
+      .meals-grid { gap: 0.75rem !important; grid-template-columns: minmax(0, 1fr) !important; }
     }
     @media (min-width: 640px) {
-      .meals-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      .meals-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
     }
     @media (min-width: 1280px) {
-      .meals-grid { grid-template-columns: repeat(3, 1fr) !important; }
+      .meals-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
     }
   `],
 })
@@ -527,7 +527,7 @@ export class MealsComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit(): void {
-    this.seo.setPageTitle('Meals - Vyaru Tiffin', 'Browse our selection of freshly prepared meals');
+    this.seo.setPageTitle('Meals - VyaruFood & Tiffin Service', 'Browse our selection of freshly prepared meals');
 
     this.subscriptions.push(
       this.searchSubject.pipe(

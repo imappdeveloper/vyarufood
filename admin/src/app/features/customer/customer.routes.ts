@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { customerAuthGuard } from '../../core/guards/customer-auth.guard';
+import { guestGuard } from '../../core/guards/guest.guard';
 
 export const CUSTOMER_ROUTES: Routes = [
   {
@@ -22,17 +24,17 @@ export const CUSTOMER_ROUTES: Routes = [
       { path: 'subscriptions', loadComponent: () => import('./public/subscription-plans/subscription-plans.component').then(m => m.SubscriptionPlansComponent) },
       { path: 'subscriptions/:slug', loadComponent: () => import('./public/subscription-plan-detail/subscription-plan-detail.component').then(m => m.SubscriptionPlanDetailComponent) },
       { path: 'holidays', loadComponent: () => import('./public/holidays/holidays.component').then(m => m.CustomerHolidaysComponent) },
-      { path: 'subscriptions/:slug/configure', loadComponent: () => import('./public/subscription-configure/subscription-configure.component').then(m => m.SubscriptionConfigureComponent), canActivate: [() => import('../../core/guards/customer-auth.guard').then(m => m.customerAuthGuard)] },
+      { path: 'subscriptions/:slug/configure', loadComponent: () => import('./public/subscription-configure/subscription-configure.component').then(m => m.SubscriptionConfigureComponent), canActivate: [customerAuthGuard] },
 
       // Cart / Checkout (public layout, auth-protected where needed)
       { path: 'cart', loadComponent: () => import('./cart/cart.component').then(m => m.CartComponent) },
-      { path: 'checkout', loadComponent: () => import('./checkout/checkout.component').then(m => m.CheckoutComponent), canActivate: [() => import('../../core/guards/customer-auth.guard').then(m => m.customerAuthGuard)] },
-      { path: 'order-confirmation', loadComponent: () => import('./order-confirmation/order-confirmation.component').then(m => m.OrderConfirmationComponent), canActivate: [() => import('../../core/guards/customer-auth.guard').then(m => m.customerAuthGuard)] },
+      { path: 'checkout', loadComponent: () => import('./checkout/checkout.component').then(m => m.CheckoutComponent), canActivate: [customerAuthGuard] },
+      { path: 'order-confirmation', loadComponent: () => import('./order-confirmation/order-confirmation.component').then(m => m.OrderConfirmationComponent), canActivate: [customerAuthGuard] },
 
       // Auth pages (guest only)
       {
         path: '',
-        canActivate: [() => import('../../core/guards/guest.guard').then(m => m.guestGuard)],
+        canActivate: [guestGuard],
         children: [
           { path: 'login', loadComponent: () => import('./auth/login/login.component').then(m => m.LoginComponent) },
           { path: 'register', loadComponent: () => import('./auth/register/register.component').then(m => m.RegisterComponent) },
@@ -45,7 +47,7 @@ export const CUSTOMER_ROUTES: Routes = [
       // Customer account pages (auth-protected, same layout as public)
       {
         path: 'customer',
-        canActivate: [() => import('../../core/guards/customer-auth.guard').then(m => m.customerAuthGuard)],
+        canActivate: [customerAuthGuard],
         children: [
           { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
           { path: 'dashboard', loadComponent: () => import('./account/dashboard/dashboard.component').then(m => m.DashboardComponent) },

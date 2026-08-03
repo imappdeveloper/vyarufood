@@ -20,9 +20,9 @@ import { FogOverlayComponent } from './fog-overlay.component';
         <div class="absolute inset-0 opacity-[0.04]" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;1&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
       </div>
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-28 relative z-10">
+      <div class="max-w-7xl mx-auto lg:px-8 py-0 sm:py-20 lg:py-28 relative z-10">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div class="max-w-xl">
+          <div class="hidden lg:block max-w-xl">
             <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/15 backdrop-blur-sm rounded-full border border-white/20 mb-6"
                  style="animation: float 3s ease-in-out infinite;">
               <span class="w-2 h-2 bg-lime-300 rounded-full animate-pulse"></span>
@@ -51,7 +51,7 @@ import { FogOverlayComponent } from './fog-overlay.component';
             </div>
 
             @if (stats()) {
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+              <div class="hidden sm:grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
                 <div class="bg-white/10 backdrop-blur-sm rounded-2xl px-4 py-3 border border-white/10">
                   <div class="flex items-center gap-2 mb-1">
                     <span class="material-icons text-yellow-300 text-lg">star</span>
@@ -84,78 +84,48 @@ import { FogOverlayComponent } from './fog-overlay.component';
             }
           </div>
 
-          <div class="hidden lg:flex justify-center items-center">
-            <div class="relative" style="animation: float 4s ease-in-out infinite;">
-              <div class="w-80 h-80 rounded-full bg-white/[0.08] backdrop-blur-sm border border-white/[0.12] flex items-center justify-center">
-                <div class="w-56 h-56 rounded-full bg-white/[0.08] flex items-center justify-center border border-white/[0.08]">
-                  <span class="text-[7rem] drop-shadow-lg">🍱</span>
+          <div class="relative w-full h-56 sm:h-72 lg:h-96 overflow-hidden lg:rounded-3xl lg:shadow-2xl lg:shadow-black/25 lg:ring-1 lg:ring-white/20">
+            <div class="flex h-full transition-transform duration-700 ease-out will-change-transform"
+                 [style.transform]="'translateX(' + (0 - currentSlide() * 100) + '%)'">
+              @for (img of heroBanners; track img; let i = $index) {
+                <div class="relative h-full min-w-full">
+                  <img [src]="img" [alt]="'Tiffin banner ' + (i + 1)" class="h-full w-full object-cover" loading="eager" />
                 </div>
-              </div>
+              }
+            </div>
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-emerald-950/45 via-transparent to-transparent lg:from-transparent"></div>
 
-              <!-- Floating ingredients around the bento -->
-              <div style="position: absolute; top: -1rem; left: 1rem; font-size: 2rem; animation: heroIngFloat 5s ease-in-out infinite; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));">&#127813;</div>
-              <div style="position: absolute; top: 15%; right: -2rem; font-size: 1.75rem; animation: heroIngFloat 4.5s ease-in-out infinite 0.5s; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));">&#129367;</div>
-              <div style="position: absolute; bottom: 10%; left: -2rem; font-size: 1.75rem; animation: heroIngFloat 5.5s ease-in-out infinite 1s; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));">&#127798;</div>
-              <div style="position: absolute; bottom: -1rem; right: 1rem; font-size: 2rem; animation: heroIngFloat 4s ease-in-out infinite 1.5s; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));">&#129361;</div>
-              <div style="position: absolute; top: 50%; left: -2.5rem; font-size: 1.5rem; animation: heroIngFloat 6s ease-in-out infinite 2s; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));">&#127807;</div>
-              <div style="position: absolute; top: 40%; right: -2.5rem; font-size: 1.5rem; animation: heroIngFloat 5s ease-in-out infinite 0.8s; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));">&#127805;</div>
-
-              <div class="absolute top-2 -right-2 bg-white rounded-2xl px-4 py-3 shadow-2xl shadow-black/10 flex items-center gap-2.5"
-                   style="animation: float 3s ease-in-out 0.5s infinite;">
-                <div class="w-9 h-9 bg-green-100 rounded-xl flex items-center justify-center">
-                  <span class="material-icons text-green-500 text-lg">check_circle</span>
-                </div>
-                <div>
-                  <p class="text-xs font-bold text-slate-900">Fresh Daily</p>
-                  <p class="text-[10px] text-slate-400">100% Hygienic</p>
-                </div>
-              </div>
-
-              <div class="absolute -bottom-2 -left-2 bg-white rounded-2xl px-4 py-3 shadow-2xl shadow-black/10 flex items-center gap-2.5"
-                   style="animation: float 3s ease-in-out 1s infinite;">
-                <div class="w-9 h-9 bg-emerald-100 rounded-xl flex items-center justify-center">
-                  <span class="material-icons text-emerald-500 text-lg">schedule</span>
-                </div>
-                <div>
-                  <p class="text-xs font-bold text-slate-900">On-Time</p>
-                  <p class="text-[10px] text-slate-400">30 min delivery</p>
-                </div>
-              </div>
-
-              <div class="absolute top-1/2 -left-6 bg-white rounded-2xl px-4 py-3 shadow-2xl shadow-black/10 flex items-center gap-2.5"
-                   style="animation: float 3s ease-in-out 1.5s infinite;">
-                <div class="w-9 h-9 bg-yellow-100 rounded-xl flex items-center justify-center">
-                  <span class="material-icons text-yellow-500 text-lg">thumb_up</span>
-                </div>
-                <div>
-                  <p class="text-xs font-bold text-slate-900">4.8 Rating</p>
-                  <p class="text-[10px] text-slate-400">Top rated</p>
-                </div>
-              </div>
+            <div class="absolute bottom-3 left-0 right-0 flex items-center justify-center gap-1.5">
+              @for (img of heroBanners; track img; let i = $index) {
+                <button type="button" (click)="goToSlide(i)" [attr.aria-label]="'Go to slide ' + (i + 1)"
+                        class="h-1.5 rounded-full transition-all duration-300 cursor-pointer"
+                        [style.width]="i === currentSlide() ? '1.25rem' : '0.375rem'"
+                        [style.background]="i === currentSlide() ? '#ffffff' : 'rgba(255,255,255,0.6)'"></button>
+              }
             </div>
           </div>
         </div>
       </div>
 
-      <div class="absolute bottom-0 left-0 right-0">
+      <div class="hidden sm:block absolute bottom-0 left-0 right-0">
         <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full">
           <path d="M0 40C240 80 480 0 720 40C960 80 1200 0 1440 40V80H0V40Z" fill="white"/>
         </svg>
       </div>
     </section>
   `,
-  styles: [`
-    @keyframes heroIngFloat {
-      0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
-      25% { transform: translateY(-14px) rotate(6deg) scale(1.05); }
-      50% { transform: translateY(-6px) rotate(-4deg) scale(0.95); }
-      75% { transform: translateY(-16px) rotate(3deg) scale(1.02); }
-    }
-  `],
+  styles: [``],
 })
 export class HeroSectionComponent implements OnInit, AfterViewInit, OnDestroy {
   private seo = inject(SeoService);
   private browseApi = inject(CustomerBrowseApiService);
+  heroBanners: string[] = [
+    'assets/banners/banner-1.png',
+    'assets/banners/banner-2.png',
+    'assets/banners/banner-3.png',
+  ];
+  currentSlide = signal(0);
+  private sliderInterval?: ReturnType<typeof setInterval>;
   stats = signal<HomeStats | null>(null);
   animatedStats = signal({ rating: '0', meals: '0', customers: '0', deliveries: '0' });
   private animationFrame?: number;
@@ -173,12 +143,33 @@ export class HeroSectionComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       },
     });
+
+    this.startSlider();
   }
 
   ngAfterViewInit(): void {}
 
   ngOnDestroy(): void {
     if (this.animationFrame) cancelAnimationFrame(this.animationFrame);
+    if (this.sliderInterval) clearInterval(this.sliderInterval);
+  }
+
+  goToSlide(index: number): void {
+    this.currentSlide.set(index);
+    this.restartSlider();
+  }
+
+  private nextSlide(): void {
+    this.currentSlide.set((this.currentSlide() + 1) % this.heroBanners.length);
+  }
+
+  private startSlider(): void {
+    this.sliderInterval = setInterval(() => this.nextSlide(), 4000);
+  }
+
+  private restartSlider(): void {
+    if (this.sliderInterval) clearInterval(this.sliderInterval);
+    this.startSlider();
   }
 
   private animateCounters(data: HomeStats): void {

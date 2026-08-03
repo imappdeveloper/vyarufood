@@ -29,7 +29,7 @@ import { environment } from '../../../../../environments/environment';
       }
 
       <!-- Hero Header -->
-      <div style="background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%); border-radius: 20px; padding: 28px 32px; margin-bottom: 24px; position: relative; overflow: hidden;">
+      <div class="settings-hero" style="background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%); border-radius: 20px; padding: 28px 32px; margin-bottom: 24px; position: relative; overflow: hidden;">
         <div style="position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.08);"></div>
         <div style="position: absolute; bottom: -60px; left: 30%; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.05);"></div>
         <div style="position: relative; z-index: 1;">
@@ -362,10 +362,26 @@ import { environment } from '../../../../../environments/environment';
             </div>
           </div>
         </div>
+      } @else if (!loading) {
+        <div style="background: #fff; border: 1px solid #f1f5f9; border-radius: 1rem; padding: 3rem 2rem; text-align: center;">
+          <div style="width: 64px; height: 64px; margin: 0 auto 1rem; background: linear-gradient(135deg, #fef2f2, #fee2e2); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+            <span class="material-icons" style="color: #ef4444; font-size: 1.75rem;">error_outline</span>
+          </div>
+          <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin: 0 0 0.35rem;">Failed to load settings</h3>
+          <p style="color: #64748b; font-size: 0.85rem; margin: 0 0 1.5rem;">We couldn't load your settings. Please try again.</p>
+          <button (click)="loadData()"
+            style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.625rem 1.25rem; background: #059669; color: white; font-weight: 600; font-size: 0.85rem; border-radius: 0.625rem; border: none; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(5,150,105,0.25);"
+            onmouseover="this.style.background='#047857'" onmouseout="this.style.background='#059669'">
+            <span class="material-icons" style="font-size: 1.1rem;">refresh</span> Try Again
+          </button>
+        </div>
       }
     </div>
   `,
   styles: [`
+    @media (max-width: 1023px) {
+      .settings-hero { display: none !important; }
+    }
     @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
   `],

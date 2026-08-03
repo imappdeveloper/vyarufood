@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
           <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-500/15 text-green-700 text-xs font-bold rounded-full mb-3 uppercase tracking-wider">
             <span class="material-icons text-sm">favorite</span> Our Promise
           </span>
-          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-3">Why Choose Vyaru Tiffin?</h2>
+          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-3">Why Choose VyaruFood &amp; Tiffin Service?</h2>
           <p class="text-slate-600 max-w-lg mx-auto text-sm sm:text-base">We make healthy eating effortless</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">

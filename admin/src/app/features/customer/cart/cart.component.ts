@@ -23,7 +23,7 @@ import { CartToastComponent } from './components/cart-toast/cart-toast.component
     <app-cart-toast />
 
     <!-- Hero Banner -->
-    <div style="background: linear-gradient(135deg, #059669, #10b981, #34d399); padding: 2rem 1rem; position: relative; overflow: hidden;">
+    <div class="cart-hero" style="background: linear-gradient(135deg, #059669, #10b981, #34d399); padding: 2rem 1rem; position: relative; overflow: hidden;">
       <div style="position: absolute; top: -30px; right: -30px; width: 120px; height: 120px; background: rgba(255,255,255,0.08); border-radius: 50%;"></div>
       <div style="position: absolute; bottom: -20px; left: 10%; width: 80px; height: 80px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
       <div style="max-width: 1200px; margin: 0 auto; position: relative; z-index: 1;">
@@ -185,6 +185,7 @@ import { CartToastComponent } from './components/cart-toast/cart-toast.component
       .cart-summary-col { position: sticky; top: 1rem; align-self: start; }
     }
     @media (max-width: 1023px) {
+      .cart-hero { display: none !important; }
       .mobile-checkout-bar { display: block !important; }
       :host { padding-bottom: 5rem; }
     }

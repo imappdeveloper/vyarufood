@@ -71,7 +71,7 @@ export class FaqPreviewComponent {
     { icon: 'local_shipping', question: 'How does the tiffin delivery work?', answer: 'We prepare fresh meals daily and deliver them to your doorstep during your chosen time slot. Our delivery partners ensure your food arrives hot and on time. You can track your delivery in real-time through your account.' },
     { icon: 'pause_circle', question: 'Can I skip or pause my subscription?', answer: 'Absolutely! You can skip meals up to your plan\'s maximum skip days and pause your subscription whenever needed. Changes made before the cut-off time (typically 10 PM the previous day) will take effect from the next meal.' },
     { icon: 'swap_horiz', question: 'How do I upgrade or downgrade my plan?', answer: 'You can upgrade your plan anytime from your subscription dashboard. Upgrade charges are prorated for the remaining days. For downgrades, please contact our support team as this is handled on a case-by-case basis.' },
-    { icon: 'payments', question: 'What payment methods are accepted?', answer: 'We accept UPI, credit/debit cards, net banking, and wallet payments through Razorpay. You can also use your Vyaru wallet balance for payments. All transactions are 100% secure.' },
+    { icon: 'payments', question: 'What payment methods are accepted?', answer: 'We accept UPI, credit/debit cards, net banking, and wallet payments through Razorpay. You can also use your VyaruFood wallet balance for payments. All transactions are 100% secure.' },
     { icon: 'cancel', question: 'How do I cancel my subscription?', answer: 'You can cancel your subscription from your account dashboard. Cancellation takes effect at the end of your current billing cycle. Depending on your plan, a cancellation fee may apply.' },
   ];
 

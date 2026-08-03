@@ -32,7 +32,7 @@ import { NotificationService } from '../../../core/services/notification.service
               <span class="material-icons" style="font-size:20px;line-height:1;color:#6ee7b7;">restaurant_menu</span>
             </div>
             <div>
-              <span class="text-lg font-semibold tracking-tight">Vyaru Tiffin</span>
+              <span class="text-lg font-semibold tracking-tight">VyaruFood &amp; Tiffin Service</span>
               <div class="text-xs text-emerald-200/70 font-medium tracking-wide">ADMIN PORTAL</div>
             </div>
           </div>
@@ -48,7 +48,7 @@ import { NotificationService } from '../../../core/services/notification.service
           <h1 class="text-[2.5rem] font-bold leading-[1.15] mb-5" style="text-shadow: 0 2px 20px rgba(0,0,0,0.15);">
             Welcome to<br/>
             <span style="background: linear-gradient(135deg, #6ee7b7, #34d399, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
-              Vyaru Tiffin
+              VyaruFood &amp; Tiffin Service
             </span>
           </h1>
           <p class="text-base text-emerald-100/80 max-w-sm leading-relaxed">
@@ -78,7 +78,7 @@ import { NotificationService } from '../../../core/services/notification.service
         </div>
 
         <div style="animation: fadeSlideUp 0.8s ease-out 0.6s both;">
-          <p class="text-xs text-emerald-200/50">&copy; {{ currentYear }} Vyaru Tiffin. All rights reserved.</p>
+          <p class="text-xs text-emerald-200/50">&copy; {{ currentYear }} VyaruFood &amp; Tiffin Service. All rights reserved.</p>
         </div>
       </div>
 
@@ -89,7 +89,7 @@ import { NotificationService } from '../../../core/services/notification.service
               style="background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05)); backdrop-filter: blur(12px);">
               <span class="material-icons" style="font-size:28px;line-height:1;color:#6ee7b7;">restaurant_menu</span>
             </div>
-            <h2 class="text-white text-2xl font-bold">Vyaru Tiffin</h2>
+            <h2 class="text-white text-2xl font-bold">VyaruFood &amp; Tiffin Service</h2>
             <p class="text-emerald-200/60 text-sm mt-1">Admin Portal</p>
           </div>
 

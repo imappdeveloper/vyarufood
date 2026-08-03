@@ -35,7 +35,7 @@ import { PaginationMeta } from '../../../../core/interfaces/api-response.interfa
     <div style="max-width: 56rem; margin: 0 auto; padding: 1.5rem 0;">
 
       <!-- Hero Banner -->
-      <div style="background: linear-gradient(135deg, #059669, #10b981, #34d399); border-radius: 1rem; padding: 1.5rem 1.75rem; margin-bottom: 1.5rem; position: relative; overflow: hidden;">
+      <div class="orders-hero" style="background: linear-gradient(135deg, #059669, #10b981, #34d399); border-radius: 1rem; padding: 1.5rem 1.75rem; margin-bottom: 1.5rem; position: relative; overflow: hidden;">
         <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
         <div style="position: absolute; bottom: -15px; left: 30%; width: 60px; height: 60px; background: rgba(255,255,255,0.06); border-radius: 50%;"></div>
         <div style="position: relative; z-index: 1;">
@@ -254,6 +254,9 @@ import { PaginationMeta } from '../../../../core/interfaces/api-response.interfa
     </div>
   `,
   styles: [`
+    @media (max-width: 1023px) {
+      .orders-hero { display: none !important; }
+    }
     @keyframes pulse {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.5; }

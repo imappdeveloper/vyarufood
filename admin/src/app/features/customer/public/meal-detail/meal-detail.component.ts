@@ -483,7 +483,7 @@ export class MealDetailComponent implements OnInit, OnDestroy {
     if (navigator.share) {
       navigator.share({
         title: this.meal()?.name || 'Check out this meal',
-        text: this.meal()?.short_description || `Try ${this.meal()?.name} from Vyaru Tiffin`,
+        text: this.meal()?.short_description || `Try ${this.meal()?.name} from VyaruFood & Tiffin Service`,
         url,
       }).catch(() => {});
     } else {
@@ -495,7 +495,7 @@ export class MealDetailComponent implements OnInit, OnDestroy {
 
   private setSeoMeta(m: Meal): void {
     const title = m.name;
-    const desc = m.short_description || m.description || `${m.name} - Fresh meal from Vyaru Tiffin`;
+    const desc = m.short_description || m.description || `${m.name} - Fresh meal from VyaruFood & Tiffin Service`;
     this.seo.setPageTitle(title, desc.substring(0, 160));
 
     // Open Graph

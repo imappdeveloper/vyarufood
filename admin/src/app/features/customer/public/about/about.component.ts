@@ -25,7 +25,7 @@ import { RouterModule } from '@angular/router';
         </div>
         <h1 style="font-size: clamp(2.2rem, 5vw, 3.2rem); font-weight: 800; color: white; margin: 0 0 16px 0; line-height: 1.2; animation: aboutSlideIn 0.6s ease-out 0.15s both;">
           <span class="material-icons" style="font-size: clamp(1.8rem, 4vw, 2.6rem); vertical-align: middle; margin-right: 8px;">info</span>
-          About Vyaru Tiffin
+          About VyaruFood &amp; Tiffin Service
         </h1>
         <p style="font-size: clamp(1rem, 2vw, 1.15rem); color: rgba(255,255,255,0.9); max-width: 600px; margin: 0 auto; line-height: 1.7; animation: aboutSlideIn 0.6s ease-out 0.25s both;">
           Delivering fresh, nutritious, homestyle meals to your doorstep since 2024. We believe healthy eating should be convenient and affordable.
@@ -46,7 +46,7 @@ import { RouterModule } from '@angular/router';
             From a Simple Idea to <span style="color: #059669;">1000+ Happy Customers</span>
           </h2>
           <p style="font-size: 1rem; color: #4b5563; line-height: 1.8; margin: 0 0 16px 0;">
-            Vyaru Tiffin started with a simple belief: everyone deserves access to fresh, homestyle meals without the hassle of cooking. Founded in 2024, we set out to bridge the gap between busy lifestyles and nutritious eating.
+            VyaruFood &amp; Tiffin Service started with a simple belief: everyone deserves access to fresh, homestyle meals without the hassle of cooking. Founded in 2024, we set out to bridge the gap between busy lifestyles and nutritious eating.
           </p>
           <p style="font-size: 1rem; color: #4b5563; line-height: 1.8; margin: 0 0 24px 0;">
             What began as a small kitchen serving a handful of customers has grown into a trusted meal delivery service serving hundreds of happy families daily across Mumbai.
@@ -167,7 +167,7 @@ import { RouterModule } from '@angular/router';
       <div style="max-width: 1100px; margin: 0 auto; position: relative; z-index: 2;">
         <div style="text-align: center; margin-bottom: 50px; animation: aboutSlideIn 0.6s ease-out 0.1s both;">
           <div style="display: inline-block; background: rgba(255,255,255,0.15); color: white; font-size: 12px; font-weight: 700; padding: 6px 16px; border-radius: 20px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.2); letter-spacing: 0.5px; text-transform: uppercase;">Why Us</div>
-          <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.4rem); font-weight: 800; color: white; margin: 0 0 12px 0;">Why Choose Vyaru Tiffin?</h2>
+          <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.4rem); font-weight: 800; color: white; margin: 0 0 12px 0;">Why Choose VyaruFood &amp; Tiffin Service?</h2>
           <p style="font-size: 1rem; color: rgba(255,255,255,0.85); max-width: 500px; margin: 0 auto;">Because your health and taste buds deserve the best</p>
         </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">

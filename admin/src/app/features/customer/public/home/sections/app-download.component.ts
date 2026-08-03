@@ -27,7 +27,7 @@ import { CommonModule } from '@angular/common';
 
               <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight mb-3 animate-[appSlideIn_0.6s_ease-out_0.1s_both]">
                 Get the
-                <span class="bg-gradient-to-r from-emerald-500 to-green-400 bg-clip-text text-transparent">Vyaru Tiffin</span>
+                <span class="bg-gradient-to-r from-emerald-500 to-green-400 bg-clip-text text-transparent">VyaruFood &amp; Tiffin Service</span>
                 App
               </h2>
 
@@ -99,7 +99,7 @@ import { CommonModule } from '@angular/common';
                       <div style="width: 3.5rem; height: 3.5rem; background: rgba(255,255,255,0.15); border-radius: 1rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1);">
                         <span class="material-icons" style="font-size: 1.75rem;">restaurant_menu</span>
                       </div>
-                      <p style="font-size: 0.85rem; font-weight: 800; margin-bottom: 0.25rem;">Vyaru Tiffin</p>
+                      <p style="font-size: 0.85rem; font-weight: 800; margin-bottom: 0.25rem;">VyaruFood &amp; Tiffin Service</p>
                       <p style="font-size: 0.55rem; color: rgba(255,255,255,0.7); margin-bottom: 0.75rem;">Homestyle Meals Delivered</p>
                       <!-- Mini food cards -->
                       <div style="display: flex; gap: 0.375rem; justify-content: center;">

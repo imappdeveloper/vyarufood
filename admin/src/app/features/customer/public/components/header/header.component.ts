@@ -43,13 +43,13 @@ interface NavLink {
           <!-- Logo -->
           <a routerLink="/"
              style="display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0;"
-             aria-label="Vyaru Tiffin Home">
+             aria-label="VyaruFood & Tiffin Service Home">
             <div style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #059669, #10b981); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(5,150,105,0.2);">
               <span style="font-size: 18px; line-height: 1; color: white;">&#127835;</span>
             </div>
             <div style="display: flex; flex-direction: column; line-height: 1.1;">
-              <span style="font-size: 1.15rem; font-weight: 800; color: #0f172a; letter-spacing: -0.3px;">
-                Vyaru<span style="color: #059669;">Tiffin</span>
+              <span style="font-size: 1.05rem; font-weight: 800; color: #0f172a; letter-spacing: -0.3px; white-space: nowrap;">
+                Vyaru<span style="color: #059669;">Food</span> &amp; Tiffin Service
               </span>
               <span style="font-size: 0.6rem; font-weight: 500; color: #94a3b8; letter-spacing: 0.5px; text-transform: uppercase;">Pure Veg Meals</span>
             </div>
@@ -137,7 +137,8 @@ interface NavLink {
 
             <!-- Cart -->
             <button routerLink="/cart"
-              style="position: relative; display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border: none; background: transparent; color: #64748b; border-radius: 999px; cursor: pointer; transition: all 0.2s;"
+              [style.display]="isDesktop() ? 'flex' : 'none'"
+              style="position: relative; align-items: center; justify-content: center; width: 38px; height: 38px; border: none; background: transparent; color: #64748b; border-radius: 999px; cursor: pointer; transition: all 0.2s;"
               onmouseover="this.style.background='#f1f5f9'; this.style.color='#059669'"
               onmouseout="this.style.background='transparent'; this.style.color='#64748b'">
               <span class="material-icons" style="font-size: 20px;">shopping_cart</span>
@@ -153,7 +154,8 @@ interface NavLink {
             <!-- Logged Out -->
             <ng-container *ngIf="!isLoggedIn()">
               <a routerLink="/login"
-                style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 22px; font-size: 0.85rem; font-weight: 700; color: white; background: linear-gradient(135deg, #059669, #10b981); border-radius: 999px; text-decoration: none; transition: all 0.25s; box-shadow: 0 2px 8px rgba(5,150,105,0.2);"
+                [style.display]="isDesktop() ? 'inline-flex' : 'none'"
+                style="align-items: center; gap: 6px; padding: 8px 22px; font-size: 0.85rem; font-weight: 700; color: white; background: linear-gradient(135deg, #059669, #10b981); border-radius: 999px; text-decoration: none; transition: all 0.25s; box-shadow: 0 2px 8px rgba(5,150,105,0.2);"
                 onmouseover="this.style.boxShadow='0 6px 20px rgba(5,150,105,0.35)'; this.style.transform='translateY(-1px)'"
                 onmouseout="this.style.boxShadow='0 2px 8px rgba(5,150,105,0.2)'; this.style.transform='none'">
                 <span class="material-icons" style="font-size: 18px;">shopping_bag</span>
@@ -176,7 +178,7 @@ interface NavLink {
               </button>
 
               <!-- Profile -->
-              <div style="position: relative;">
+              <div [style.display]="isDesktop() ? 'block' : 'none'" style="position: relative;">
                 <button (click)="toggleProfileDropdown($event)"
                   [attr.aria-expanded]="profileDropdownOpen()"
                   style="display: flex; align-items: center; gap: 8px; padding: 3px 10px 3px 3px; border-radius: 999px; border: 1.5px solid transparent; background: transparent; cursor: pointer; transition: all 0.2s;"
@@ -267,7 +269,7 @@ interface NavLink {
           <div style="width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, #059669, #10b981); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(5,150,105,0.2);">
             <span style="font-size: 16px; line-height: 1; color: white;">&#127835;</span>
           </div>
-          <span style="font-size: 1.1rem; font-weight: 800; color: #0f172a;">Vyaru<span style="color: #059669;">Tiffin</span></span>
+          <span style="font-size: 1.1rem; font-weight: 800; color: #0f172a;">Vyaru<span style="color: #059669;">Food</span> &amp; Tiffin Service</span>
         </div>
         <button (click)="mobileMenuOpen.set(false)"
           style="display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border: none; background: #f1f5f9; color: #64748b; border-radius: 10px; cursor: pointer; transition: all 0.15s;"

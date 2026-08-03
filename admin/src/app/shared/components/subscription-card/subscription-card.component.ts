@@ -9,12 +9,12 @@ import { SubscriptionPlan } from '../../../core/models/subscription-plan/subscri
   imports: [CommonModule, RouterModule],
   template: `
     <a [routerLink]="['/subscriptions', plan.slug]"
-       style="display: flex; flex-direction: column; background: #fff; border-radius: 1rem; overflow: hidden; border: 1px solid #e2e8f0; text-decoration: none; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); position: relative; height: 100%;"
+       style="display: flex; flex-direction: column; background: #fff; border-radius: 1rem; border: 1px solid #e2e8f0; text-decoration: none; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); position: relative; height: 100%;"
        onmouseover="this.style.boxShadow='0 20px 50px rgba(0,0,0,0.08), 0 8px 20px rgba(5,150,105,0.06)'; this.style.borderColor='#a7f3d0'; this.style.transform='translateY(-4px)'"
        onmouseout="this.style.boxShadow='none'; this.style.borderColor='#e2e8f0'; this.style.transform='none'">
 
       @if (plan.is_popular) {
-        <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #059669, #16a34a, #059669);"></div>
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #059669, #16a34a, #059669); border-radius: 1rem 1rem 0 0;"></div>
         <div style="position: absolute; top: -0.6rem; left: 50%; transform: translateX(-50%); z-index: 10; display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.875rem; background: linear-gradient(135deg, #059669, #16a34a); color: #fff; font-size: 0.6rem; font-weight: 700; border-radius: 9999px; box-shadow: 0 4px 12px rgba(5,150,105,0.4); text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap;">
           <span class="material-icons" style="font-size: 12px;">workspace_premium</span> Most Popular
         </div>

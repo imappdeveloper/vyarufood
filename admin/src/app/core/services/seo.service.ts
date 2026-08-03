@@ -8,7 +8,7 @@ export class SeoService {
   private title = inject(Title);
   private meta = inject(Meta);
   private router = inject(Router);
-  private readonly appName = 'Vyaru Tiffin';
+  private readonly appName = 'VyaruFood & Tiffin Service';
 
   init(): void {
     this.router.events.pipe(

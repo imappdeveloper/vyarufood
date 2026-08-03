@@ -9,21 +9,21 @@ import { Meal } from '../../../../../core/models/meal/meal.model';
   selector: 'app-specials-section',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  template: `    <section style="background: #fff; padding: 3.5rem 0; position: relative; overflow: hidden;" aria-label="Today's specials">
+  template: `    <section style="background: #fff; padding: 2rem 0; position: relative; overflow: hidden;" class="sm:!py-20" aria-label="Today's specials">
       <div style="position: absolute; top: -8rem; right: -4rem; width: 28rem; height: 28rem; background: radial-gradient(circle, rgba(5,150,105,0.08) 0%, transparent 70%); pointer-events: none;"></div>
       <div style="position: absolute; bottom: -6rem; left: -6rem; width: 24rem; height: 24rem; background: radial-gradient(circle, rgba(22,163,74,0.06) 0%, transparent 70%); pointer-events: none;"></div>
 
       <div style="max-width: 80rem; margin: 0 auto; padding: 0 1rem; position: relative; z-index: 10;">
         <!-- Section Header -->
-        <div style="display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2.5rem;">
+        <div style="display: flex; align-items: flex-end; justify-content: space-between;" class="mb-6 sm:mb-10">
           <div>
             <div style="display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0.75rem; background: linear-gradient(135deg, #059669, #16a34a); color: #fff; font-size: 0.7rem; font-weight: 700; border-radius: 9999px; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; box-shadow: 0 2px 8px rgba(5,150,105,0.3);">
               <span class="material-icons" style="font-size: 14px;">local_fire_department</span> Chef's Picks
             </div>
-            <h2 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-bottom: 0.375rem; line-height: 1.2;">
+            <h2 class="sm:!text-3xl" style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 0.375rem; line-height: 1.2;">
               Today's Specials
             </h2>
-            <p style="color: #64748b; font-size: 0.875rem;">Handpicked by our chef — freshly prepared today</p>
+            <p class="sm:!text-sm" style="color: #64748b; font-size: 0.78rem;">Handpicked by our chef — freshly prepared today</p>
           </div>
           @if (meals().length > 0) {
             <a routerLink="/meals" [queryParams]="{ featured: 1 }"
@@ -151,7 +151,7 @@ import { Meal } from '../../../../../core/models/meal/meal.model';
           </div>
 
           <!-- Mobile View All -->
-          <div style="text-align: center; margin-top: 2rem;" class="sm:!hidden">
+          <div style="text-align: center; margin-top: 1.25rem;" class="sm:!hidden">
             <a routerLink="/meals" [queryParams]="{ featured: 1 }"
                style="display: inline-flex; align-items: center; gap: 0.375rem; color: #059669; font-weight: 600; font-size: 0.875rem; text-decoration: none;">
               View All <span class="material-icons" style="font-size: 18px;">arrow_forward</span>

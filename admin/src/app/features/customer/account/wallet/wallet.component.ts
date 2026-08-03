@@ -425,7 +425,7 @@ export class WalletComponent implements OnInit, OnDestroy {
               key: 'rzp_test_placeholder',
               amount: Math.round(amount * 100),
               currency: 'INR',
-              name: 'Vyaru Tiffin',
+              name: 'VyaruFood & Tiffin Service',
               description: `Wallet Recharge ₹${amount.toFixed(2)}`,
               order_id: orderData.gateway_order_id,
               handler: (response: RazorpayResponse) => {

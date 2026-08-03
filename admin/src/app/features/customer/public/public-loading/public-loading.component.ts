@@ -30,7 +30,7 @@ import { Component, input } from '@angular/core';
           </div>
         </div>
 
-        <div class="brand">Vyaru<span class="brand-accent">Tiffin</span></div>
+        <div class="brand">Vyaru<span class="brand-accent">Food</span> &amp; Tiffin Service</div>
 
         <p class="tagline">{{ message() }}</p>
 
@@ -102,7 +102,7 @@ import { Component, input } from '@angular/core';
     .steam path:nth-child(3) { animation-delay: 0.7s; }
 
     .brand {
-      font-size: 1.9rem;
+      font-size: 1.45rem;
       font-weight: 800;
       color: #0f172a;
       letter-spacing: -0.02em;

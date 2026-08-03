@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
           <div>
             <div class="flex items-center gap-2 mb-4">
               <span class="material-icons text-primary-400 text-3xl">restaurant_menu</span>
-              <span class="text-2xl font-bold text-white">Vyaru Tiffin</span>
+              <span class="text-2xl font-bold text-white">VyaruFood &amp; Tiffin Service</span>
             </div>
             <p class="text-gray-400 text-sm leading-relaxed mb-6">
               Fresh, healthy tiffin meals delivered to your doorstep
@@ -76,7 +76,7 @@ import { CommonModule } from '@angular/common';
         <div class="border-t border-slate-700 pt-8">
           <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p class="text-gray-400 text-sm">
-              &copy; 2026 Vyaru Tiffin. All rights reserved.
+              &copy; 2026 VyaruFood &amp; Tiffin Service. All rights reserved.
             </p>
             <p class="text-gray-400 text-sm">
               Made with <span class="text-red-500">&#10084;&#65039;</span> in India

@@ -13,15 +13,15 @@ import { SkeletonLoaderComponent } from '../../../../../shared/components/skelet
   standalone: true,
   imports: [CommonModule, RouterModule, MealCardComponent, SkeletonLoaderComponent],
   template: `
-    <section class="bg-slate-100 py-14 sm:py-20 relative" aria-label="Popular meals">
+    <section class="bg-slate-100 py-8 sm:py-20 relative" aria-label="Popular meals">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-end justify-between mb-10 sm:mb-12">
+        <div class="flex items-end justify-between mb-5 sm:mb-12">
           <div>
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-500/15 text-green-700 text-xs font-bold rounded-full mb-3 uppercase tracking-wider">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-500/15 text-green-700 text-xs font-bold rounded-full mb-2 uppercase tracking-wider">
               <span class="material-icons text-sm">trending_up</span> Trending
             </span>
-            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-2">Popular Meals</h2>
-            <p class="text-slate-600 text-sm sm:text-base">Most loved by our customers</p>
+            <h2 class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-1">Popular Meals</h2>
+            <p class="text-slate-600 text-xs sm:text-base">Most loved by our customers</p>
           </div>
           @if (meals().length > 0) {
             <a routerLink="/meals" [queryParams]="{ bestseller: 1 }"

@@ -10,6 +10,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const notificationService = inject(NotificationService);
 
+  if (req.url.includes('/api/v1/customer')) {
+    return next(req);
+  }
+
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       const isLoginPage = router.url.includes('/auth/login');

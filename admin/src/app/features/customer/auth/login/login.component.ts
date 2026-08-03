@@ -3,25 +3,26 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { CustomerAuthService } from '../../../../core/services/customer-auth.service';
 import { FirebaseOtpService } from '../../../../core/services/firebase-otp.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 
 @Component({
   selector: 'app-customer-login',
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <div class="min-h-[80vh] flex items-center justify-center px-4 py-8">
+    <div class="min-h-[calc(100vh-67px)] flex items-center justify-center px-4 pt-8 pb-14">
       <div class="w-full max-w-md">
-        <!-- Header -->
-        <div class="text-center mb-8">
-          <a routerLink="/" class="inline-flex items-center gap-2 mb-6">
+        <!-- Brand header -->
+        <div class="text-center mb-7">
+          <a routerLink="/" class="inline-flex items-center justify-center gap-2 mb-3">
             <span class="material-icons text-emerald-600 text-3xl">restaurant_menu</span>
-            <span class="text-2xl font-bold text-gray-900">Vyaru Tiffin</span>
+            <span class="text-xl sm:text-2xl font-bold text-gray-900">VyaruFood &amp; Tiffin Service</span>
           </a>
           <h1 class="text-2xl font-bold text-gray-900">Welcome Back</h1>
-          <p class="text-gray-500 mt-1">Sign in to continue your order</p>
+          <p class="text-gray-500 mt-1 text-sm">Sign in to continue your order</p>
         </div>
 
-        <div class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+        <div class="bg-white rounded-2xl p-6 sm:p-8 border border-gray-100 shadow-sm">
           <button
             type="button"
             (click)="loginWithGoogle()"
@@ -50,7 +51,7 @@ import { FirebaseOtpService } from '../../../../core/services/firebase-otp.servi
         </div>
 
         <div class="mt-6 text-center text-sm text-gray-500">
-          New to Vyaru Tiffin? <a routerLink="/register" class="text-emerald-600 font-medium hover:text-emerald-700">Create an account</a>
+          New to VyaruFood &amp; Tiffin Service? <a routerLink="/register" class="text-emerald-600 font-medium hover:text-emerald-700">Create an account</a>
         </div>
       </div>
     </div>
@@ -59,6 +60,7 @@ import { FirebaseOtpService } from '../../../../core/services/firebase-otp.servi
 export class LoginComponent {
   private authService = inject(CustomerAuthService);
   private firebaseOtp = inject(FirebaseOtpService);
+  private notification = inject(NotificationService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
@@ -85,8 +87,9 @@ export class LoginComponent {
               });
               this.router.navigate(['/register']);
             } else {
+              this.notification.success('Login successful');
               const returnUrl = this.route.snapshot.queryParams['returnUrl'];
-              if (returnUrl && returnUrl.startsWith('/')) {
+              if (returnUrl && returnUrl.startsWith('/') && !returnUrl.startsWith('/login')) {
                 this.router.navigateByUrl(returnUrl);
               } else {
                 this.router.navigate(['/']);

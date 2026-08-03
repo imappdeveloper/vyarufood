@@ -9,16 +9,16 @@ import { Meal } from '../../../../../core/models/meal/meal.model';
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <section class="bg-white py-14 sm:py-20 relative overflow-hidden" aria-label="Healthy meals">
+    <section class="bg-white py-8 sm:py-20 relative overflow-hidden" aria-label="Healthy meals">
       <div class="absolute bottom-0 left-0 w-80 h-80 bg-green-100/50 rounded-full blur-[100px] -translate-x-1/2 translate-y-1/2"></div>
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="flex items-end justify-between mb-10 sm:mb-12">
+        <div class="flex items-end justify-between mb-5 sm:mb-12">
           <div>
-            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-500/15 text-green-700 text-xs font-bold rounded-full mb-3 uppercase tracking-wider">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-500/15 text-green-700 text-xs font-bold rounded-full mb-2 uppercase tracking-wider">
               <span class="material-icons text-sm">eco</span> Healthy
             </span>
-            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-2">Healthy Meals</h2>
-            <p class="text-slate-600 text-sm sm:text-base">Nutritious options for a healthier lifestyle</p>
+            <h2 class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-1">Healthy Meals</h2>
+            <p class="text-slate-600 text-xs sm:text-base">Nutritious options for a healthier lifestyle</p>
           </div>
           @if (meals().length > 0) {
             <a routerLink="/meals"
