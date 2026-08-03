@@ -255,7 +255,7 @@ import { PaginationMeta } from '../../../../core/interfaces/api-response.interfa
   `,
   styles: [`
     @media (max-width: 1023px) {
-      .orders-hero { display: none !important; }
+      .orders-hero { padding: 0.75rem 0.75rem !important; }
     }
     @keyframes pulse {
       0%, 100% { opacity: 1; }
