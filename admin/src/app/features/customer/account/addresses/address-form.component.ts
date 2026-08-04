@@ -92,29 +92,6 @@ import { CustomerAddress } from '../../../../core/models/customer/customer-addre
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
           <div>
-            <label style="display: block; font-size: 13px; font-weight: 500; color: #374151; margin-bottom: 4px;">Country *</label>
-            <select [(ngModel)]="form.country_id" (ngModelChange)="onCountryChange()"
-              style="width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 13px; outline: none; transition: all 0.2s; box-sizing: border-box; background: #fff;" onfocus="this.style.borderColor='#059669';this.style.boxShadow='0 0 0 2px rgba(5,150,105,0.15)'" onblur="this.style.borderColor='#d1d5db';this.style.boxShadow='none'">
-              <option [ngValue]="null">Select Country</option>
-              @for (c of countries; track c.id) {
-                <option [ngValue]="c.id">{{ c.name }}</option>
-              }
-            </select>
-          </div>
-          <div>
-            <label style="display: block; font-size: 13px; font-weight: 500; color: #374151; margin-bottom: 4px;">State *</label>
-            <select [(ngModel)]="form.state_id" (ngModelChange)="onStateChange()" [disabled]="!form.country_id || loadingStates"
-              [style]="'width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 13px; outline: none; transition: all 0.2s; box-sizing: border-box; background: #fff;' + ((!form.country_id || loadingStates) ? ' opacity: 0.6; cursor: not-allowed;' : '')" onfocus="this.style.borderColor='#059669';this.style.boxShadow='0 0 0 2px rgba(5,150,105,0.15)'" onblur="this.style.borderColor='#d1d5db';this.style.boxShadow='none'">
-              <option [ngValue]="null">{{ loadingStates ? 'Loading...' : 'Select State' }}</option>
-              @for (s of states; track s.id) {
-                <option [ngValue]="s.id">{{ s.name }}</option>
-              }
-            </select>
-          </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
-          <div>
             <label style="display: block; font-size: 13px; font-weight: 500; color: #374151; margin-bottom: 4px;">City *</label>
             <select [(ngModel)]="form.city_id" (ngModelChange)="onCityChange()" [disabled]="!form.state_id || loadingCities"
               [style]="'width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 13px; outline: none; transition: all 0.2s; box-sizing: border-box; background: #fff;' + ((!form.state_id || loadingCities) ? ' opacity: 0.6; cursor: not-allowed;' : '')" onfocus="this.style.borderColor='#059669';this.style.boxShadow='0 0 0 2px rgba(5,150,105,0.15)'" onblur="this.style.borderColor='#d1d5db';this.style.boxShadow='none'">
@@ -298,12 +275,24 @@ export class AddressFormComponent implements OnInit, OnChanges {
           this.countries = res.data;
           if (this.address) {
             this.populateForm();
-          } else if (this.countries.length === 1) {
-            this.form.country_id = this.countries[0].id;
-            this.onCountryChange();
+          } else {
+            this.autoSelectIndiaAndMp();
           }
         }
       },
+    });
+  }
+
+  private autoSelectIndiaAndMp(): void {
+    const india = this.countries.find((c: any) => c.id === 1 || /^india$/i.test((c.name || '').trim()));
+    if (!india) return;
+    this.form.country_id = india.id;
+    this.loadStatesForCountry(india.id, () => {
+      const mp = this.states.find((s: any) => s.id === 1 || /madhya pradesh/i.test((s.name || '').trim()));
+      if (mp) {
+        this.form.state_id = mp.id;
+        this.loadCitiesForState(mp.id);
+      }
     });
   }
 
