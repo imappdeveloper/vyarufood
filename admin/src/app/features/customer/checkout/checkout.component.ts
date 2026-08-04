@@ -215,7 +215,7 @@ import { PaymentMethodSelectorComponent } from './components/payment-method-sele
                   <label style="display: block; font-size: 0.78rem; font-weight: 600; color: #374151; margin-bottom: 0.35rem;">Delivery Date</label>
                   <input type="date" [min]="minDeliveryDate"
                     [ngModel]="checkout.checkoutData().deliveryDate"
-                    (ngModelChange)="checkout.updateData({ deliveryDate: $event })"
+                    (ngModelChange)="onDeliveryDateChange($event)"
                     style="width: 100%; padding: 0.6rem 0.875rem; border: 1px solid #d1d5db; border-radius: 0.625rem; font-size: 0.85rem; outline: none; transition: border-color 0.2s; box-sizing: border-box;"
                     onfocus="this.style.borderColor='#059669'; this.style.boxShadow='0 0 0 3px rgba(5,150,105,0.1)'" onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'" />
                 </div>
@@ -226,10 +226,16 @@ import { PaymentMethodSelectorComponent } from './components/payment-method-sele
                     style="width: 100%; padding: 0.6rem 0.875rem; border: 1px solid #d1d5db; border-radius: 0.625rem; font-size: 0.85rem; outline: none; transition: border-color 0.2s; box-sizing: border-box; background: white;"
                     onfocus="this.style.borderColor='#059669'; this.style.boxShadow='0 0 0 3px rgba(5,150,105,0.1)'" onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
                     <option value="">Select a time slot</option>
-                    <option value="morning">Morning (7:00 AM - 10:00 AM)</option>
-                    <option value="afternoon">Afternoon (12:00 PM - 3:00 PM)</option>
-                    <option value="evening">Evening (5:00 PM - 8:00 PM)</option>
+                    @for (slot of availableSlots; track slot.value) {
+                      <option [value]="slot.value">{{ slot.label }}</option>
+                    }
+                    @if (availableSlots.length === 0) {
+                      <option value="" disabled>No slots available for this date</option>
+                    }
                   </select>
+                  @if (availableSlots.length === 0) {
+                    <p style="font-size: 0.75rem; color: #d97706; margin: 0.35rem 0 0;">All delivery slots for this date have closed. Please pick a later date.</p>
+                  }
                 </div>
                 <div>
                   <label style="display: block; font-size: 0.78rem; font-weight: 600; color: #374151; margin-bottom: 0.35rem;">Delivery Instructions (Optional)</label>
@@ -505,13 +511,43 @@ export class CheckoutComponent implements OnInit {
   showAddressForm = false;
   minDeliveryDate = '';
 
+  deliverySlots: { value: string; label: string; endMinute: number }[] = [
+    { value: 'morning', label: 'Morning (7:00 AM - 10:00 AM)', endMinute: 10 * 60 },
+    { value: 'afternoon', label: 'Afternoon (12:00 PM - 3:00 PM)', endMinute: 15 * 60 },
+    { value: 'evening', label: 'Evening (5:00 PM - 8:00 PM)', endMinute: 20 * 60 },
+  ];
+
+  get availableSlots(): { value: string; label: string }[] {
+    return this.getSlotsForDate(this.checkout.checkoutData().deliveryDate);
+  }
+
   ngOnInit(): void {
-    const d = new Date();
-    d.setDate(d.getDate() + 1);
-    this.minDeliveryDate = d.toISOString().split('T')[0];
+    this.minDeliveryDate = this.toDateStr(new Date());
 
     this.checkout.reset();
     this.checkout.loadSummary();
+  }
+
+  onDeliveryDateChange(date: string): void {
+    this.checkout.updateData({ deliveryDate: date });
+    const current = this.checkout.checkoutData().deliverySlot;
+    if (current && !this.getSlotsForDate(date).some((s) => s.value === current)) {
+      this.checkout.updateData({ deliverySlot: '' });
+    }
+  }
+
+  private getSlotsForDate(date: string | null | undefined): { value: string; label: string }[] {
+    if (!date || date !== this.toDateStr(new Date())) return this.deliverySlots;
+    const now = new Date();
+    const nowMinute = now.getHours() * 60 + now.getMinutes();
+    return this.deliverySlots.filter((s) => s.endMinute > nowMinute);
+  }
+
+  private toDateStr(d: Date): string {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
   }
 
   onAddressSelected(address: any): void {
