@@ -50,31 +50,6 @@ import { Subject, takeUntil } from 'rxjs';
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.875rem;">
         <div>
-          <label style="display: block; font-size: 0.78rem; font-weight: 600; color: #374151; margin-bottom: 0.35rem;">Country *</label>
-          <select [(ngModel)]="form.country_id" (ngModelChange)="onCountryChange()"
-            style="width: 100%; padding: 0.6rem 0.875rem; border: 1px solid #d1d5db; border-radius: 0.625rem; font-size: 0.8rem; outline: none; transition: border-color 0.2s; box-sizing: border-box; background: white;"
-            onfocus="this.style.borderColor='#059669'; this.style.boxShadow='0 0 0 3px rgba(5,150,105,0.1)'" onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
-            <option [ngValue]="null">Select</option>
-            @for (c of countries; track c.id) {
-              <option [ngValue]="c.id">{{ c.name }}</option>
-            }
-          </select>
-        </div>
-        <div>
-          <label style="display: block; font-size: 0.78rem; font-weight: 600; color: #374151; margin-bottom: 0.35rem;">State *</label>
-          <select [(ngModel)]="form.state_id" (ngModelChange)="onStateChange()"
-            style="width: 100%; padding: 0.6rem 0.875rem; border: 1px solid #d1d5db; border-radius: 0.625rem; font-size: 0.8rem; outline: none; transition: border-color 0.2s; box-sizing: border-box; background: white;"
-            onfocus="this.style.borderColor='#059669'; this.style.boxShadow='0 0 0 3px rgba(5,150,105,0.1)'" onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
-            <option [ngValue]="null">Select</option>
-            @for (s of states; track s.id) {
-              <option [ngValue]="s.id">{{ s.name }}</option>
-            }
-          </select>
-        </div>
-      </div>
-
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.875rem;">
-        <div>
           <label style="display: block; font-size: 0.78rem; font-weight: 600; color: #374151; margin-bottom: 0.35rem;">City *</label>
           <select [(ngModel)]="form.city_id" (ngModelChange)="onCityChange()"
             style="width: 100%; padding: 0.6rem 0.875rem; border: 1px solid #d1d5db; border-radius: 0.625rem; font-size: 0.8rem; outline: none; transition: border-color 0.2s; box-sizing: border-box; background: white;"
@@ -229,9 +204,10 @@ export class AddressFormComponent implements OnInit, OnDestroy {
       next: (res) => {
         if (res.success && res.data) {
           this.countries = res.data;
-          if (this.countries.length === 1) {
-            this.form.country_id = this.countries[0].id;
-            this.onCountryChange();
+          const india = this.countries.find(c => c.id === 1 || /^india$/i.test((c.name || '').trim()));
+          if (india) {
+            this.form.country_id = india.id;
+            this.loadStatesForCountry();
           }
         }
       },
@@ -243,38 +219,29 @@ export class AddressFormComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  onCountryChange(): void {
-    this.states = [];
-    this.cities = [];
-    this.pincodes = [];
-    this.selectedPincode = null;
-    this.form.state_id = 0;
-    this.form.city_id = 0;
-    this.form.pincode_id = null;
-    if (this.form.country_id) {
-      const country = this.countries.find(c => c.id === this.form.country_id);
-      if (country?.uuid) {
-        this.addressApi.getStates(country.uuid).subscribe({
-          next: (res) => { if (res.success && res.data) this.states = res.data; },
-        });
-      }
-    }
+  private loadStatesForCountry(): void {
+    const country = this.countries.find(c => c.id === this.form.country_id);
+    if (!country?.uuid) return;
+    this.addressApi.getStates(country.uuid).subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.states = res.data;
+          const mp = this.states.find(s => s.id === 1 || /madhya pradesh/i.test((s.name || '').trim()));
+          if (mp) {
+            this.form.state_id = mp.id;
+            this.loadCitiesForState();
+          }
+        }
+      },
+    });
   }
 
-  onStateChange(): void {
-    this.cities = [];
-    this.pincodes = [];
-    this.selectedPincode = null;
-    this.form.city_id = 0;
-    this.form.pincode_id = null;
-    if (this.form.state_id) {
-      const state = this.states.find(s => s.id === this.form.state_id);
-      if (state?.uuid) {
-        this.addressApi.getCities(state.uuid).subscribe({
-          next: (res) => { if (res.success && res.data) this.cities = res.data; },
-        });
-      }
-    }
+  private loadCitiesForState(): void {
+    const state = this.states.find(s => s.id === this.form.state_id);
+    if (!state?.uuid) return;
+    this.addressApi.getCities(state.uuid).subscribe({
+      next: (res) => { if (res.success && res.data) this.cities = res.data; },
+    });
   }
 
   onCityChange(): void {

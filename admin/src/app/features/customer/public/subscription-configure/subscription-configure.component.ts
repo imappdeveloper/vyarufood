@@ -320,6 +320,16 @@ import { SeoService } from '../../../../core/services/seo.service';
                       <label style="display: block; font-size: 0.875rem; color: #6b7280; margin-bottom: 0.25rem;">Address Line 2</label>
                       <input type="text" [(ngModel)]="newAddress.address_line_2" placeholder="Area, Colony, Locality" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none; font-size: 0.875rem; box-sizing: border-box; transition: border-color 0.2s;" onfocus="this.style.borderColor='#10b981';this.style.boxShadow='0 0 0 3px rgba(16,185,129,0.15)'" onblur="this.style.borderColor='#d1d5db';this.style.boxShadow='none'" />
                     </div>
+                    <div>
+                      <label style="display: block; font-size: 0.875rem; color: #6b7280; margin-bottom: 0.25rem;">City *</label>
+                      <select [(ngModel)]="newAddress.city_id"
+                        style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; outline: none; font-size: 0.875rem; box-sizing: border-box; background: white; transition: border-color 0.2s;" onfocus="this.style.borderColor='#10b981';this.style.boxShadow='0 0 0 3px rgba(16,185,129,0.15)'" onblur="this.style.borderColor='#d1d5db';this.style.boxShadow='none'">
+                        <option [ngValue]="null">Select city</option>
+                        @for (city of cityOptions; track city.id) {
+                          <option [ngValue]="city.id">{{ city.name }}</option>
+                        }
+                      </select>
+                    </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
                       <div>
                         <label style="display: block; font-size: 0.875rem; color: #6b7280; margin-bottom: 0.25rem;">Landmark</label>
@@ -693,6 +703,8 @@ export class SubscriptionConfigureComponent implements OnInit {
     city_id: 1,
   };
 
+  cityOptions: any[] = [];
+
   addressTypes = [
     { value: 'home', label: 'Home' },
     { value: 'office', label: 'Office' },
@@ -701,6 +713,7 @@ export class SubscriptionConfigureComponent implements OnInit {
   ];
 
   ngOnInit(): void {
+    this.loadCityOptions();
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const yyyy = tomorrow.getFullYear();
@@ -763,6 +776,33 @@ export class SubscriptionConfigureComponent implements OnInit {
   onStartDateChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.startDate.set(input.value);
+  }
+
+  private loadCityOptions(): void {
+    this.addressApi.getCountries().subscribe({
+      next: (res) => {
+        if (!res.success || !res.data) return;
+        const india = res.data.find((c: any) => c.id === 1 || /^india$/i.test((c.name || '').trim()));
+        if (!india?.uuid) return;
+        this.addressApi.getStates(india.uuid).subscribe({
+          next: (res2) => {
+            if (!res2.success || !res2.data) return;
+            const mp = res2.data.find((s: any) => s.id === 1 || /madhya pradesh/i.test((s.name || '').trim()));
+            if (!mp?.uuid) return;
+            this.addressApi.getCities(mp.uuid).subscribe({
+              next: (res3) => {
+                if (res3.success && res3.data) {
+                  this.cityOptions = res3.data;
+                  if (res3.data.length === 1) {
+                    this.newAddress.city_id = res3.data[0].id;
+                  }
+                }
+              },
+            });
+          },
+        });
+      },
+    });
   }
 
   onDeliverySlotChange(event: Event): void {
@@ -843,6 +883,10 @@ export class SubscriptionConfigureComponent implements OnInit {
       this.addressFormError.set('Please enter your address.');
       return;
     }
+    if (!this.newAddress.city_id) {
+      this.addressFormError.set('Please select your city.');
+      return;
+    }
     if (!/^\d{6}$/.test(pincodeValue)) {
       this.addressFormError.set('Please enter a valid 6-digit pincode.');
       return;
@@ -894,7 +938,7 @@ export class SubscriptionConfigureComponent implements OnInit {
       is_default: false,
       country_id: 1,
       state_id: 1,
-      city_id: 1,
+      city_id: this.cityOptions.length === 1 ? this.cityOptions[0].id : 1,
     };
   }
 }
